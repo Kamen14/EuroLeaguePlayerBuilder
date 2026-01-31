@@ -1,4 +1,4 @@
-namespace EuroLeaguePlayerBuilder.Models
+namespace EuroLeaguePlayerBuilder.ViewModels
 {
     public class ErrorViewModel
     {

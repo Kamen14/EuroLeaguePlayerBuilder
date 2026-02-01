@@ -1,5 +1,6 @@
 ﻿namespace EuroLeaguePlayerBuilder.Models
 {
+    using EuroLeaguePlayerBuilder.Data.Enums;
     using System.ComponentModel.DataAnnotations;
 
     using static Common.EntityValidation.Player;
@@ -17,8 +18,7 @@
         public string LastName { get; set; } = null!;
 
         [Required]
-        [MaxLength(PlayerPositionMaxLength)]
-        public string Position { get; set; } = null!;
+        public Position Position { get; set; }
 
         [Required]
         public double PointsPerGame { get; set; }

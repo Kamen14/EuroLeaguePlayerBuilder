@@ -23,8 +23,6 @@
         {
             public const int PlayerNameMinLength = 2;
             public const int PlayerNameMaxLength = 150; //the same for both first and last name
-
-            public const int PlayerPositionMaxLength = 20;
         }
     }
 }

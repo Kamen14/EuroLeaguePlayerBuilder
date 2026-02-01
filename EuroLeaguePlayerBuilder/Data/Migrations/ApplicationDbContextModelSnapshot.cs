@@ -116,10 +116,8 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                     b.Property<double>("PointsPerGame")
                         .HasColumnType("float");
 
-                    b.Property<string>("Position")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
 
                     b.Property<double>("ReboundsPerGame")
                         .HasColumnType("float");
@@ -141,7 +139,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Ioannis",
                             LastName = "Papapetrou",
                             PointsPerGame = 12.5,
-                            Position = "Small Forward",
+                            Position = 2,
                             ReboundsPerGame = 4.2999999999999998,
                             TeamId = 1
                         },
@@ -152,7 +150,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Nick",
                             LastName = "Calathes",
                             PointsPerGame = 11.199999999999999,
-                            Position = "Point Guard",
+                            Position = 0,
                             ReboundsPerGame = 3.5,
                             TeamId = 1
                         },
@@ -163,7 +161,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Dimitris",
                             LastName = "Mitoglou",
                             PointsPerGame = 10.1,
-                            Position = "Power Forward",
+                            Position = 3,
                             ReboundsPerGame = 5.2000000000000002,
                             TeamId = 1
                         },
@@ -174,7 +172,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "DeShaun",
                             LastName = "Thomas",
                             PointsPerGame = 9.3000000000000007,
-                            Position = "Small Forward",
+                            Position = 2,
                             ReboundsPerGame = 4.0,
                             TeamId = 1
                         },
@@ -185,7 +183,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Zach",
                             LastName = "LeDay",
                             PointsPerGame = 8.6999999999999993,
-                            Position = "Center",
+                            Position = 4,
                             ReboundsPerGame = 5.5,
                             TeamId = 1
                         },
@@ -196,7 +194,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Moustapha",
                             LastName = "Fall",
                             PointsPerGame = 5.2000000000000002,
-                            Position = "Center",
+                            Position = 4,
                             ReboundsPerGame = 4.7000000000000002,
                             TeamId = 1
                         },
@@ -207,7 +205,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Sasha",
                             LastName = "Vezenkov",
                             PointsPerGame = 15.300000000000001,
-                            Position = "Power Forward",
+                            Position = 3,
                             ReboundsPerGame = 5.7999999999999998,
                             TeamId = 2
                         },
@@ -218,7 +216,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Kostas",
                             LastName = "Papanikolaou",
                             PointsPerGame = 10.199999999999999,
-                            Position = "Small Forward",
+                            Position = 2,
                             ReboundsPerGame = 4.0999999999999996,
                             TeamId = 2
                         },
@@ -229,7 +227,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Giannoulis",
                             LastName = "Larentzakis",
                             PointsPerGame = 11.0,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 3.0,
                             TeamId = 2
                         },
@@ -240,7 +238,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Georgios",
                             LastName = "Printezis",
                             PointsPerGame = 9.5,
-                            Position = "Power Forward",
+                            Position = 1,
                             ReboundsPerGame = 4.7999999999999998,
                             TeamId = 2
                         },
@@ -251,7 +249,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Shaquielle",
                             LastName = "McKissic",
                             PointsPerGame = 8.1999999999999993,
-                            Position = "Small Forward",
+                            Position = 2,
                             ReboundsPerGame = 3.2000000000000002,
                             TeamId = 2
                         },
@@ -262,7 +260,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Othello",
                             LastName = "Hunter",
                             PointsPerGame = 7.5,
-                            Position = "Center",
+                            Position = 4,
                             ReboundsPerGame = 5.0,
                             TeamId = 2
                         },
@@ -273,7 +271,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Sergio",
                             LastName = "Llull",
                             PointsPerGame = 12.300000000000001,
-                            Position = "Point Guard",
+                            Position = 0,
                             ReboundsPerGame = 2.3999999999999999,
                             TeamId = 3
                         },
@@ -284,7 +282,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Walter",
                             LastName = "Tavares",
                             PointsPerGame = 9.0,
-                            Position = "Center",
+                            Position = 4,
                             ReboundsPerGame = 6.7999999999999998,
                             TeamId = 3
                         },
@@ -295,7 +293,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Anthony",
                             LastName = "Rudy",
                             PointsPerGame = 10.5,
-                            Position = "Small Forward",
+                            Position = 2,
                             ReboundsPerGame = 4.2999999999999998,
                             TeamId = 3
                         },
@@ -306,7 +304,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Edgar",
                             LastName = "Sosa",
                             PointsPerGame = 8.6999999999999993,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 2.1000000000000001,
                             TeamId = 3
                         },
@@ -317,7 +315,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Guerschon",
                             LastName = "Yabusele",
                             PointsPerGame = 9.1999999999999993,
-                            Position = "Power Forward",
+                            Position = 2,
                             ReboundsPerGame = 3.7999999999999998,
                             TeamId = 3
                         },
@@ -328,7 +326,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Fabien",
                             LastName = "Causeur",
                             PointsPerGame = 11.0,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 2.5,
                             TeamId = 3
                         },
@@ -339,7 +337,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Nikola",
                             LastName = "Mirotic",
                             PointsPerGame = 13.1,
-                            Position = "Power Forward",
+                            Position = 3,
                             ReboundsPerGame = 5.4000000000000004,
                             TeamId = 4
                         },
@@ -350,7 +348,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Nick",
                             LastName = "Calathes",
                             PointsPerGame = 11.0,
-                            Position = "Point Guard",
+                            Position = 0,
                             ReboundsPerGame = 3.2000000000000002,
                             TeamId = 4
                         },
@@ -361,7 +359,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Brandon",
                             LastName = "Davies",
                             PointsPerGame = 10.199999999999999,
-                            Position = "Center",
+                            Position = 4,
                             ReboundsPerGame = 5.7000000000000002,
                             TeamId = 4
                         },
@@ -372,7 +370,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Leandro",
                             LastName = "Bolmaro",
                             PointsPerGame = 9.5,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 2.7999999999999998,
                             TeamId = 4
                         },
@@ -383,7 +381,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Jaka",
                             LastName = "Blazic",
                             PointsPerGame = 8.9000000000000004,
-                            Position = "Shooting Guard",
+                            Position = 0,
                             ReboundsPerGame = 2.0,
                             TeamId = 4
                         },
@@ -394,7 +392,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Pierre",
                             LastName = "Oriola",
                             PointsPerGame = 7.7999999999999998,
-                            Position = "Power Forward",
+                            Position = 3,
                             ReboundsPerGame = 4.0,
                             TeamId = 4
                         },
@@ -405,7 +403,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Ognjen",
                             LastName = "Dobric",
                             PointsPerGame = 10.0,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 2.5,
                             TeamId = 5
                         },
@@ -416,7 +414,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Filip",
                             LastName = "Perrin",
                             PointsPerGame = 8.3000000000000007,
-                            Position = "Center",
+                            Position = 4,
                             ReboundsPerGame = 4.5999999999999996,
                             TeamId = 5
                         },
@@ -427,7 +425,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Branko",
                             LastName = "Lazić",
                             PointsPerGame = 7.9000000000000004,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 2.0,
                             TeamId = 5
                         },
@@ -438,7 +436,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Jordan",
                             LastName = "Lyles",
                             PointsPerGame = 9.0999999999999996,
-                            Position = "Small Forward",
+                            Position = 2,
                             ReboundsPerGame = 3.1000000000000001,
                             TeamId = 5
                         },
@@ -449,7 +447,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Corey",
                             LastName = "Walden",
                             PointsPerGame = 11.199999999999999,
-                            Position = "Point Guard",
+                            Position = 0,
                             ReboundsPerGame = 2.5,
                             TeamId = 5
                         },
@@ -460,7 +458,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Marko",
                             LastName = "Simonovic",
                             PointsPerGame = 10.4,
-                            Position = "Power Forward",
+                            Position = 3,
                             ReboundsPerGame = 5.2999999999999998,
                             TeamId = 5
                         },
@@ -471,7 +469,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Kevin",
                             LastName = "Punter",
                             PointsPerGame = 12.199999999999999,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 3.1000000000000001,
                             TeamId = 6
                         },
@@ -482,7 +480,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Mathias",
                             LastName = "Lessort",
                             PointsPerGame = 9.5,
-                            Position = "Center",
+                            Position = 4,
                             ReboundsPerGame = 5.2999999999999998,
                             TeamId = 6
                         },
@@ -493,7 +491,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Nikola",
                             LastName = "Jovic",
                             PointsPerGame = 10.0,
-                            Position = "Small Forward",
+                            Position = 2,
                             ReboundsPerGame = 3.7000000000000002,
                             TeamId = 6
                         },
@@ -504,7 +502,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Zlatko",
                             LastName = "Racic",
                             PointsPerGame = 8.5,
-                            Position = "Power Forward",
+                            Position = 3,
                             ReboundsPerGame = 4.2000000000000002,
                             TeamId = 6
                         },
@@ -515,7 +513,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Ognjen",
                             LastName = "Jaramaz",
                             PointsPerGame = 9.0,
-                            Position = "Shooting Guard",
+                            Position = 1,
                             ReboundsPerGame = 2.7999999999999998,
                             TeamId = 6
                         },
@@ -526,7 +524,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             FirstName = "Shawn",
                             LastName = "Hines",
                             PointsPerGame = 11.1,
-                            Position = "Point Guard",
+                            Position = 0,
                             ReboundsPerGame = 2.5,
                             TeamId = 6
                         });
@@ -553,6 +551,10 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
 
+                    b.Property<string>("LogoPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(80)
@@ -571,6 +573,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             City = "Athens",
                             CoachId = 1,
                             Country = "Greece",
+                            LogoPath = "/images/panathinaikos.svg.png",
                             Name = "Panathinaikos"
                         },
                         new
@@ -579,6 +582,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             City = "Piraeus",
                             CoachId = 2,
                             Country = "Greece",
+                            LogoPath = "/images/olympiacos.svg.png",
                             Name = "Olympiacos"
                         },
                         new
@@ -587,6 +591,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             City = "Madrid",
                             CoachId = 3,
                             Country = "Spain",
+                            LogoPath = "/images/real_madrid.svg.png",
                             Name = "Real Madrid"
                         },
                         new
@@ -595,6 +600,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             City = "Barcelona",
                             CoachId = 4,
                             Country = "Spain",
+                            LogoPath = "/images/barcelona.svg.png",
                             Name = "Barcelona"
                         },
                         new
@@ -603,6 +609,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             City = "Belgrade",
                             CoachId = 5,
                             Country = "Serbia",
+                            LogoPath = "/images/crvena_zvezda.svg.png",
                             Name = "Crvena Zvezda"
                         },
                         new
@@ -611,6 +618,7 @@ namespace EuroLeaguePlayerBuilder.Data.Migrations
                             City = "Belgrade",
                             CoachId = 6,
                             Country = "Serbia",
+                            LogoPath = "/images/partizan.svg.png",
                             Name = "Partizan"
                         });
                 });

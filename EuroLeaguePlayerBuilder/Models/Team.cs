@@ -23,6 +23,9 @@
         public string City { get; set; } = null!;
 
         [Required]
+        public string LogoPath { get; set; } = null!;   
+
+        [Required]
         public int CoachId { get; set; }
 
         public virtual Coach Coach { get; set; } = null!;

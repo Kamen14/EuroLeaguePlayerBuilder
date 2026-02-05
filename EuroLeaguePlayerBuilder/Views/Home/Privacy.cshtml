@@ -1,6 +1,50 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <h1 class="display-4 text-orange mb-4">Privacy Policy</h1>
+
+    <p class="text-white lead">
+        Your privacy is important to us. This page explains how we collect, use, and protect your information.
+    </p>
+
+    <div class="card bg-dark text-white shadow-sm mt-4 p-4">
+        <h3 class="mb-3">Information Collection</h3>
+        <p>
+            We only collect information necessary to improve your experience. Any personal data is handled securely and never shared with third parties without your consent.
+        </p>
+
+        <h3 class="mt-4 mb-3">Use of Information</h3>
+        <p>
+            Information is used solely to enhance the functionality of the app, provide personalized content, and maintain system security.
+        </p>
+
+        <h3 class="mt-4 mb-3">Cookies</h3>
+        <p>
+            Our site uses minimal cookies for session management and user preferences. No tracking for advertising purposes is implemented.
+        </p>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #1e1e1e;
+    }
+
+    .text-orange {
+        color: darkorange !important;
+    }
+
+    .card {
+        border-radius: 0.5rem;
+    }
+
+    h3 {
+        color: darkorange;
+    }
+
+    p {
+        line-height: 1.6;
+    }
+</style>

@@ -1,0 +1,64 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Teams
+@model IEnumerable<TeamViewModel>
+
+@{
+    ViewData["Title"] = "Teams";
+}
+
+<div class="container py-5">
+    <h1 class="display-4 mb-5 text-orange text-center">All EuroLeague Teams</h1>
+
+    <div class="row justify-content-center g-4">
+        @foreach (var team in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <a asp-controller="Teams"
+                   asp-action="Details"
+                   asp-route-id="@team.Id"
+                   class="text-decoration-none">
+
+                    <div class="card border-0 bg-dark shadow-lg h-100">
+                        <img src="@team.LogoPath"
+                             class="card-img-top img-fluid p-3 team-logo"
+                             alt="@team.Name Logo">
+
+                        <div class="card-body">
+                            <h3 class="card-title text-white">@team.Name</h3>
+                            <p class="card-text text-white mb-1"><strong>City:</strong> @team.City</p>
+                            <p class="card-text text-white mb-1"><strong>Country:</strong> @team.Country</p>
+                            <p class="card-text text-white"><strong>Players:</strong> @team.PlayersCount</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #1e1e1e; /* matches homepage dark theme */
+    }
+
+    .text-orange {
+        color: darkorange !important;
+    }
+
+    .team-logo {
+        height: 150px; /* bigger than homepage */
+        object-fit: contain;
+    }
+
+    .card:hover {
+        transform: scale(1.03);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .card-title {
+        margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+    }
+</style>

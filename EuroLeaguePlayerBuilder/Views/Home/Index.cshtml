@@ -1,78 +1,62 @@
-﻿@{
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Home
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="container text-center py-5">
-    <h1 class="display-4 mb-4 text-white" style="color: darkorange;">Welcome to EuroleaguePlayerBuilder!</h1>
-    <p class="lead text-white mb-5">
-        Explore your favorite EuroLeague teams and build your fantasy roster.
-    </p>
+@model IEnumerable<HomePageTeamViewModel>
 
-    <div class="row justify-content-center g-4">
-        <!-- Team 1 -->
-        <div class="col-6 col-md-2">
-            <div class="card border-0 bg-dark shadow-sm">
-                <img src="~/images/panathinaikos.png" class="card-img-top img-fluid p-2" alt="Panathinaikos Logo">
-                <div class="card-body p-2">
-                    <h6 class="card-title text-white">Panathinaikos</h6>
-                </div>
-            </div>
-        </div>
+    <div class="container text-center py-5">
+        <h1 class="display-4 mb-4" style="color: darkorange;">
+            Welcome to EuroleaguePlayerBuilder!
+        </h1>
 
-        <!-- Team 2 -->
-        <div class="col-6 col-md-2">
-            <div class="card border-0 bg-dark shadow-sm">
-                <img src="~/images/olympiacos.png" class="card-img-top img-fluid p-2" alt="Olympiacos Logo">
-                <div class="card-body p-2">
-                    <h6 class="card-title text-white">Olympiacos</h6>
-                </div>
-            </div>
-        </div>
+        <p class="lead text-white mb-5">
+            Explore your favorite EuroLeague teams and build your player.
+        </p>
 
-        <!-- Team 3 -->
-        <div class="col-6 col-md-2">
-            <div class="card border-0 bg-dark shadow-sm">
-                <img src="~/images/real_madrid.png" class="card-img-top img-fluid p-2" alt="Real Madrid Logo">
-                <div class="card-body p-2">
-                    <h6 class="card-title text-white">Real Madrid</h6>
-                </div>
-            </div>
-        </div>
+        <div class="row justify-content-center g-4">
+            @foreach (var team in Model)
+            {
+                <div class="col-6 col-md-2">
+                    <a asp-controller="Teams"
+                       asp-action="Details"
+                       asp-route-id="@team.Id"
+                       class="text-decoration-none">
 
-        <!-- Team 4 -->
-        <div class="col-6 col-md-2">
-            <div class="card border-0 bg-dark shadow-sm">
-                <img src="~/images/barcelona.png" class="card-img-top img-fluid p-2" alt="Barcelona Logo">
-                <div class="card-body p-2">
-                    <h6 class="card-title text-white">Barcelona</h6>
-                </div>
-            </div>
-        </div>
+                        <div class="card border-0 bg-dark shadow-sm h-100">
+                            <img src="@team.LogoPath"
+                                class="card-img-top img-fluid p-2 team-logo"
+                                alt="@team.Name Logo">
 
-        <!-- Team 5 -->
-        <div class="col-6 col-md-2">
-            <div class="card border-0 bg-dark shadow-sm">
-                <img src="~/images/crvena_zvezda.png" class="card-img-top img-fluid p-2" alt="Crvena Zvezda Logo">
-                <div class="card-body p-2">
-                    <h6 class="card-title text-white">Crvena Zvezda</h6>
-                </div>
-            </div>
-        </div>
+                            <div class="card-body p-2">
+                                <h6 class="card-title text-white">
+                                    @team.Name
+                                </h6>
+                            </div>
+                        </div>
 
-        <!-- Team 6 -->
-        <div class="col-6 col-md-2">
-            <div class="card border-0 bg-dark shadow-sm">
-                <img src="~/images/partizan.png" class="card-img-top img-fluid p-2" alt="Partizan Logo">
-                <div class="card-body p-2">
-                    <h6 class="card-title text-white">Partizan</h6>
+                    </a>
                 </div>
-            </div>
+            }
         </div>
     </div>
-</div>
 
-<style>
-    body {
-        background-color: #1e1e1e; /* dark background */
-    }
-</style>
+    <style>
+        body {
+            background-color: #1e1e1e;
+        }
+
+       .team-logo {
+            height: 120px; /* same height for all logos */
+            object-fit: contain; /* keeps aspect ratio */
+       }
+
+       .card {
+            min-height: 200px;
+       }
+
+        .card:hover {
+            transform: scale(1.03);
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>

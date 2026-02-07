@@ -4,6 +4,7 @@ namespace EuroLeaguePlayerBuilder.Common
 {
     public static class PlayerPositionHelper
     {
+
         public static Dictionary<Position, string> PositionToString { get; } = new Dictionary<Position, string>
         {
             { Position.PointGuard, "Point Guard" },

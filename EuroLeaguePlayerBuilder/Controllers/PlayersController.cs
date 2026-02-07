@@ -1,7 +1,9 @@
 ﻿using EuroLeaguePlayerBuilder.Data;
+using EuroLeaguePlayerBuilder.Data.Enums;
 using EuroLeaguePlayerBuilder.Models;
 using EuroLeaguePlayerBuilder.ViewModels.Players;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using static EuroLeaguePlayerBuilder.Common.PlayerPositionHelper;
 
@@ -37,7 +39,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
         public IActionResult Details(int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 return BadRequest();
             }
@@ -47,7 +49,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 .AsNoTracking()
                 .SingleOrDefault(p => p.Id == id);
 
-            if(player == null)
+            if (player == null)
             {
                 return NotFound();
             }
@@ -68,17 +70,87 @@ namespace EuroLeaguePlayerBuilder.Controllers
             return View(viewModel);
         }
 
-        /*
+
         [HttpGet]
         public IActionResult Create()
         {
+            PlayerInputModel inputModel = new PlayerInputModel
+            {
+                Teams = LoadTeamsDropdown()
+            };
 
+            return View(inputModel);
         }
+
 
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create(PlayerInputModel inputModel)
         {
+            inputModel.Teams = LoadTeamsDropdown();
+
+            if (!ModelState.IsValid)
+            {
+                return View(inputModel);
+            }
+            
+            if(!TeamExists(inputModel.TeamId))
+            {
+                ModelState.AddModelError(nameof(inputModel.TeamId), "Selected team does not exist.");
+                
+                return View(inputModel);
+            }
+
+            if (!Enum.IsDefined(typeof(Position), inputModel.Position))
+            {
+                ModelState.AddModelError(nameof(inputModel.Position), "Selected position is invalid.");
+
+                return View(inputModel);
+            }
+
+            try
+            {
+                Player player = new Player
+                {
+                    FirstName = inputModel.FirstName,
+                    LastName = inputModel.LastName,
+                    Position = inputModel.Position,
+                    PointsPerGame = inputModel.PointsPerGame,
+                    ReboundsPerGame = inputModel.ReboundsPerGame,
+                    AssistsPerGame = inputModel.AssistsPerGame,
+                    TeamId = inputModel.TeamId
+                };
+
+                _dbContext.Players.Add(player);
+                _dbContext.SaveChanges();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the player. Please try again.");
+
+                return View(inputModel);
+            }
         }
-        */
+        
+
+        private List<CreatePlayerTeamViewModel> LoadTeamsDropdown()
+        {
+           List<CreatePlayerTeamViewModel> loadedTeams = _dbContext.Teams
+                     .Select(t => new CreatePlayerTeamViewModel
+                     {
+                         Id = t.Id,
+                         Name = t.Name
+                     })
+                     .OrderBy(t => t.Name)
+                     .ToList();
+
+            return loadedTeams;
+        }
+
+        private bool TeamExists(int teamId)
+        {
+            return _dbContext.Teams.Any(t => t.Id == teamId);
+        }
     }
 }

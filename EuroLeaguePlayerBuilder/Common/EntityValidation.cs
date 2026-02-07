@@ -17,12 +17,21 @@
         public static class Coach
         {
             public const int CoachNameMinLength = 2;
-            public const int CoachNameMaxLength = 150; //the same for both first and last name
+            public const int CoachNameMaxLength = 40; //the same for both first and last name
         }
         public static class Player
         {
             public const int PlayerNameMinLength = 2;
-            public const int PlayerNameMaxLength = 150; //the same for both first and last name
+            public const int PlayerNameMaxLength = 40;//the same for both first and last name
+
+            public const int MinPointsPerGame = 0;
+            public const int MaxPointsPerGame = 50;
+
+            public const int MinReboundsPerGame = 0;
+            public const int MaxReboundsPerGame = 30;
+
+            public const int MinAssistsPerGame = 0;
+            public const int MaxAssistsPerGame = 20;
         }
     }
 }

@@ -5,6 +5,7 @@ using EuroLeaguePlayerBuilder.ViewModels.Players;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EuroLeaguePlayerBuilder.ViewModels.Coaches;
+using static EuroLeaguePlayerBuilder.Common.PlayerPositionHelper;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -30,6 +31,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                     LogoPath = t.LogoPath,
                     PlayersCount = t.Players.Count
                 })
+                .OrderBy(tvm => tvm.Name)
                 .AsNoTracking()
                 .ToList();
 
@@ -65,13 +67,17 @@ namespace EuroLeaguePlayerBuilder.Controllers
                     Id = team.Coach.Id,
                     FirstName = team.Coach.FirstName,
                     LastName = team.Coach.LastName,
+                    TitlesWon = team.Coach.TitlesWon
                 },
                 Players = team.Players.Select(p => new PlayerViewModel
                 {
                     Id = p.Id,
                     FirstName = p.FirstName,
-                    Position = p.Position.ToString(),
-                }).ToList()
+                    LastName = p.LastName,
+                    Position = PositionToString[p.Position],
+                })
+                .OrderBy(pvm => pvm.FirstName)
+                .ToList()
             };
 
             return View(teamDetails);

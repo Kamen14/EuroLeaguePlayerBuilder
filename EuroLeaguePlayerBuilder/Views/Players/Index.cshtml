@@ -1,0 +1,47 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
+@model IEnumerable<PlayerViewModel>
+
+@{
+    ViewData["Title"] = "Players";
+}
+
+<div class="container mt-5">
+
+    <!-- Page header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white text-orange">All Players</h2>
+
+        <a asp-action="Create"
+           class="btn btn-warning text-dark fw-semibold">
+            + Add Player
+        </a>
+    </div>
+
+    <!-- Divider -->
+    <hr class="border-secondary" />
+
+    <!-- Players list -->
+    <div class="bg-dark p-4 rounded shadow">
+        <partial name="_PlayerPartial" model="Model" />
+    </div>
+
+</div>
+
+<style>
+    body {
+        background-color: #1e1e1e;
+    }
+
+    .text-orange {
+        color: darkorange !important;
+    }
+
+    table th,
+    table td {
+        vertical-align: middle;
+    }
+
+    .btn-warning {
+        font-weight: bold;
+    }
+</style>

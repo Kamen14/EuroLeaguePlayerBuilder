@@ -1,0 +1,70 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
+@model PlayerDetailsViewModel
+
+<div class="container mt-5">
+
+    <h2 class="text-orange mb-4">
+        @Model.FirstName @Model.LastName
+    </h2>
+
+    <table class="table table-dark table-striped">
+        <tbody>
+            <tr>
+                <th>Position</th>
+                <td>@Model.Position</td>
+            </tr>
+
+            <tr>
+                <th>Points Per Game</th>
+                <td>@Model.PointsPerGame</td>
+            </tr>
+
+            <tr>
+                <th>Rebounds Per Game</th>
+                <td>@Model.ReboundsPerGame</td>
+            </tr>
+
+            <tr>
+                <th>Assists Per Game</th>
+                <td>@Model.AssistsPerGame</td>
+            </tr>
+
+            <tr>
+                <th>Team</th>
+                <td>
+                    <a asp-controller="Team"
+                       asp-action="Details"
+                       asp-route-id="@Model.TeamId"
+                       class="text-orange text-decoration-none fw-bold">
+                        @Model.TeamName
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <a asp-controller="Players" asp-action="Index" class="btn btn-outline-light">
+            Back to Players
+        </a>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #1e1e1e;
+    }
+
+    .text-orange {
+        color: darkorange !important;
+    }
+
+    table th,
+    table td {
+        vertical-align: middle;
+    }
+
+    .btn-warning {
+        font-weight: bold;
+    }
+</style>

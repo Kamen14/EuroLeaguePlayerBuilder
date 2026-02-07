@@ -1,0 +1,23 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Coaches
+@model CoachViewModel
+
+<h3 class="text-white mb-3">Coach</h3>
+@if (Model != null)
+{
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Titles Won</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.FirstName</td>
+                <td>@Model.LastName</td>
+                <td>@Model.TitlesWon</td>
+            </tr>
+        </tbody>
+    </table>
+}

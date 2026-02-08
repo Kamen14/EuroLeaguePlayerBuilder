@@ -38,15 +38,12 @@
                         </a>
 
                         <!-- Delete button -->
-                        <form asp-controller="Players"
-                              asp-action="Delete"
-                              asp-route-id="@player.Id"
-                              method="post"
-                              class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                Delete
-                            </button>
-                        </form>
+                        <a asp-controller="Players"
+                           asp-action="Delete"
+                           asp-route-id="@player.Id"
+                           class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
                     </td>
                 </tr>
             }

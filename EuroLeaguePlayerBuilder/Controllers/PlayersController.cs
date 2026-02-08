@@ -132,7 +132,156 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return View(inputModel);
             }
         }
-        
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            Player? player = _dbContext.Players
+                .Include(p => p.Team)
+                .AsNoTracking()
+                .SingleOrDefault(p => p.Id == id);
+
+            if (player == null)
+            {
+                return NotFound();
+            }
+
+            PlayerInputModel inputModel = new PlayerInputModel
+            {
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                Position = player.Position,
+                PointsPerGame = player.PointsPerGame,
+                ReboundsPerGame = player.ReboundsPerGame,
+                AssistsPerGame = player.AssistsPerGame,
+                TeamId = player.TeamId,
+                Teams = LoadTeamsDropdown()
+            };
+            return View(inputModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute] int id, PlayerInputModel inputModel)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            Player? selectedPlayer = _dbContext.Players
+                .Include(p => p.Team)
+                .SingleOrDefault(p => p.Id == id);
+
+            if (selectedPlayer == null)
+            {
+                return NotFound();
+            }
+
+            inputModel.Teams = LoadTeamsDropdown();
+
+            if (!ModelState.IsValid)
+            {
+                return View(inputModel);
+            }
+
+            if (!TeamExists(inputModel.TeamId))
+            {
+                ModelState.AddModelError(nameof(inputModel.TeamId), "Selected team does not exist.");
+
+                return View(inputModel);
+            }
+
+            if (!Enum.IsDefined(typeof(Position), inputModel.Position))
+            {
+                ModelState.AddModelError(nameof(inputModel.Position), "Selected position is invalid.");
+
+                return View(inputModel);
+            }
+
+            try
+            {
+                selectedPlayer.FirstName = inputModel.FirstName;
+                selectedPlayer.LastName = inputModel.LastName;
+                selectedPlayer.Position = inputModel.Position;
+                selectedPlayer.PointsPerGame = inputModel.PointsPerGame;
+                selectedPlayer.ReboundsPerGame = inputModel.ReboundsPerGame;
+                selectedPlayer.AssistsPerGame = inputModel.AssistsPerGame;
+                selectedPlayer.TeamId = inputModel.TeamId;
+
+                _dbContext.SaveChanges();
+                
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occured while editing the player. Please try again.");
+
+                return View(inputModel);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            Player? player = _dbContext.Players
+                .Include(p => p.Team)
+                .AsNoTracking()
+                .SingleOrDefault(p => p.Id == id);
+
+            if (player == null)
+            {
+                return NotFound();
+            }
+
+            DeletePlayerViewModel deleteViewModel = new DeletePlayerViewModel
+            {
+                FirstName = player.FirstName,
+                LastName = player.LastName
+            };
+
+            return View(deleteViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Delete([FromRoute]int id, DeletePlayerViewModel? viewModel)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            Player? selectedPlayer = _dbContext.Players
+                .Include(p => p.Team)
+                .SingleOrDefault(p => p.Id == id);
+
+            if (selectedPlayer == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                _dbContext.Players.Remove(selectedPlayer);
+                _dbContext.SaveChanges();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while deleting the player. Please try again.");
+                return View(viewModel);
+            }
+        }
 
         private List<CreatePlayerTeamViewModel> LoadTeamsDropdown()
         {

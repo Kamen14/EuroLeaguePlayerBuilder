@@ -1,0 +1,36 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
+@model DeletePlayerViewModel
+
+<div class="container mt-5">
+    <div class="card bg-dark text-white">
+        <div class="card-body">
+            <h3 class="card-title text-warning">Confirm Delete</h3>
+            <p>Are you sure you want to delete player <strong>@Model.FirstName @Model.LastName</strong>?</p>
+
+            <form asp-action="Delete" asp-controller="Players" method="post">
+                @*<input type="hidden" asp-for="Id" />*@
+                <button type="submit" class="btn btn-danger me-2">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #1e1e1e;
+    }
+
+    .text-orange {
+        color: darkorange !important;
+    }
+
+    table th,
+    table td {
+        vertical-align: middle;
+    }
+
+    .btn-warning {
+        font-weight: bold;
+    }
+</style>

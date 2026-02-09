@@ -283,6 +283,35 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
         }
 
+        
+        public IActionResult Search(string? name)
+        {
+            IQueryable<PlayerViewModel> playersQuery = _dbContext.Players
+               .Select(p => new PlayerViewModel
+               {
+                   Id = p.Id,
+                   FirstName = p.FirstName,
+                   LastName = p.LastName,
+                   Position = PositionToString[p.Position],
+               })
+               .AsNoTracking();
+
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                playersQuery = playersQuery
+                    .Where(p => p.FirstName.ToLower().Contains(name.ToLower()) 
+                    || p.LastName.ToLower().Contains(name.ToLower()));
+            }
+
+            IEnumerable<PlayerViewModel> filteredPlayers = playersQuery
+                .OrderBy(pvm => pvm.FirstName)
+                .ThenBy(pvm => pvm.LastName)
+                .ToList();
+
+            return View(nameof(Index), filteredPlayers);
+        }
+
         private List<CreatePlayerTeamViewModel> LoadTeamsDropdown()
         {
            List<CreatePlayerTeamViewModel> loadedTeams = _dbContext.Teams

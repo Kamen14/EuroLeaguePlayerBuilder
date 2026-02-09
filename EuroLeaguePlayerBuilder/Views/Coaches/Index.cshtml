@@ -1,0 +1,82 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Coaches
+@model IEnumerable<AllCoachesViewModel>
+
+@{
+    ViewData["Title"] = "Coaches";
+}
+
+<div class="container mt-5">
+
+    <!-- Page header -->
+    <div class="mb-4">
+        <h2 class="text-white text-orange">All Coaches</h2>
+    </div>
+
+    <!-- Divider -->
+    <hr class="border-secondary" />
+
+    <!-- Coaches list -->
+    <div class="bg-dark p-4 rounded shadow">
+
+        @if (!Model.Any())
+        {
+            <div class="text-center text-secondary fs-5 py-4">
+                No coaches available.
+            </div>
+        }
+        else
+        {
+            <table class="table table-dark table-striped align-middle text-center mb-0">
+                <thead class="table-dark text-white border-bottom border-secondary">
+                    <tr>
+                        <th scope="col">Coach Name</th>
+                        <th scope="col">Titles Won</th>
+                        <th scope="col">Team</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var coach in Model.Select((value, index) => new { value, index }))
+                    {
+                        <tr>
+                            <!-- Coach Name -->
+                            <td>@coach.value.FirstName @coach.value.LastName</td>
+
+                            <!-- Titles Won -->
+                            <td>@coach.value.TitlesWon</td>
+
+                            <!-- Team Logo -->
+                            <td class="d-flex justify-content-center align-items-center">
+                                <a asp-controller="Teams" asp-action="Details" asp-route-id="@coach.value.TeamId">
+                                    <img src="@coach.value.TeamLogoPath"
+                                         alt="Team Logo"
+                                         style="max-width:100px; max-height:80px; object-fit:contain;"
+                                         class="rounded" />
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #1e1e1e;
+	}
+
+    .text-orange {
+        color: darkorange !important;
+    }
+
+    table th,
+    table td {
+        vertical-align: middle;
+    }
+
+    .btn-warning {
+        font-weight: bold;
+    }
+
+</style>

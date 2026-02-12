@@ -1,4 +1,4 @@
-﻿using EuroLeaguePlayerBuilder.Models;
+﻿using EuroLeaguePlayerBuilder.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

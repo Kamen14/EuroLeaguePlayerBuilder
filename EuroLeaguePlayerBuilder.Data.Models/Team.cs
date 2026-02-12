@@ -1,8 +1,9 @@
-﻿namespace EuroLeaguePlayerBuilder.Models
+﻿namespace EuroLeaguePlayerBuilder.Data.Models
 {
+    using EuroLeaguePlayerBuilder.Data.Models;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using static Common.EntityValidation.Team;
+    using static GCommon.EntityValidation.Team;
 
 
     public class Team

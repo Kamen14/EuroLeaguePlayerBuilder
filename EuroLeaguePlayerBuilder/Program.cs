@@ -1,4 +1,6 @@
 using EuroLeaguePlayerBuilder.Data;
+using EuroLeaguePlayerBuilder.Services.Core;
+using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,10 @@ namespace EuroLeaguePlayerBuilder
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+            builder.Services.AddScoped<ICoachService, CoachService>();
+            builder.Services.AddScoped<ITeamService, TeamService>();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();

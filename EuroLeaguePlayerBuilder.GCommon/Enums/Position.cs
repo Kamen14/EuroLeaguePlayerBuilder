@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EuroLeaguePlayerBuilder.Data.Enums
+namespace EuroLeaguePlayerBuilder.GCommon.Enums
 {
     public enum Position
     {

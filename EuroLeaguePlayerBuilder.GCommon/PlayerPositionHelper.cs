@@ -1,6 +1,6 @@
-﻿using EuroLeaguePlayerBuilder.Data.Enums;
+﻿using EuroLeaguePlayerBuilder.GCommon.Enums;
 
-namespace EuroLeaguePlayerBuilder.Common
+namespace EuroLeaguePlayerBuilder.GCommon
 {
     public static class PlayerPositionHelper
     {

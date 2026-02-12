@@ -1,8 +1,8 @@
-﻿namespace EuroLeaguePlayerBuilder.Models
+﻿namespace EuroLeaguePlayerBuilder.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Common.EntityValidation.Coach;
+    using static GCommon.EntityValidation.Coach;
     public class Coach
     {
         [Key]

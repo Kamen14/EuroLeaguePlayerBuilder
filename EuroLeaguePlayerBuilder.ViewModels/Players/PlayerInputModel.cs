@@ -1,6 +1,6 @@
-﻿using EuroLeaguePlayerBuilder.Data.Enums;
+﻿using EuroLeaguePlayerBuilder.GCommon.Enums;
 using System.ComponentModel.DataAnnotations;
-using static EuroLeaguePlayerBuilder.Common.EntityValidation.Player;
+using static EuroLeaguePlayerBuilder.GCommon.EntityValidation.Player;
 
 namespace EuroLeaguePlayerBuilder.ViewModels.Players
 {

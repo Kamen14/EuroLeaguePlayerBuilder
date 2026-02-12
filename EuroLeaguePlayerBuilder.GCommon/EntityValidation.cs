@@ -1,4 +1,4 @@
-﻿namespace EuroLeaguePlayerBuilder.Common
+﻿namespace EuroLeaguePlayerBuilder.GCommon
 {
     public class EntityValidation
     {

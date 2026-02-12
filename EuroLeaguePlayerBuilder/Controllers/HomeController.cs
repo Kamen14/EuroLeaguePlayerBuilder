@@ -1,5 +1,6 @@
 using EuroLeaguePlayerBuilder.Data;
-using EuroLeaguePlayerBuilder.Models;
+using EuroLeaguePlayerBuilder.Data.Models;
+using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.ViewModels;
 using EuroLeaguePlayerBuilder.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
@@ -11,26 +12,18 @@ namespace EuroLeaguePlayerBuilder.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ITeamService _teamService;
 
-        public HomeController(ApplicationDbContext dbContext, ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ITeamService teamService)
         {
-            _dbContext = dbContext;
             _logger = logger;
+            _teamService = teamService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<HomePageTeamViewModel> teams = _dbContext
-                .Teams
-                .Select(t => new HomePageTeamViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                    LogoPath = t.LogoPath
-                })
-                .AsNoTracking()
-                .ToList();
+            IEnumerable<HomePageTeamViewModel> teams = await _teamService
+                .GetTeamsForHomePageAsync();
 
             return View(teams);
         }

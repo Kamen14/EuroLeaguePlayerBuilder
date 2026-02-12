@@ -1,9 +1,9 @@
-﻿namespace EuroLeaguePlayerBuilder.Models
+﻿namespace EuroLeaguePlayerBuilder.Data.Models
 {
-    using EuroLeaguePlayerBuilder.Data.Enums;
+    using EuroLeaguePlayerBuilder.GCommon.Enums;
     using System.ComponentModel.DataAnnotations;
 
-    using static Common.EntityValidation.Player;
+    using static GCommon.EntityValidation.Player;
     public class Player
     {
         [Key]

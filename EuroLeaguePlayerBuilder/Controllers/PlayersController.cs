@@ -1,99 +1,73 @@
-﻿using EuroLeaguePlayerBuilder.Data;
-using EuroLeaguePlayerBuilder.Data.Enums;
-using EuroLeaguePlayerBuilder.Models;
+﻿using EuroLeaguePlayerBuilder.GCommon.Enums;
+using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.ViewModels.Players;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using static EuroLeaguePlayerBuilder.Common.PlayerPositionHelper;
+using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
     public class PlayersController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IPlayerService _playerService;
 
-        public PlayersController(ApplicationDbContext dbContext)
+        public PlayersController(IPlayerService playerService)
         {
-            _dbContext = dbContext;
+            _playerService = playerService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<PlayerViewModel> allPlayers = _dbContext.Players
-                .Select(p => new PlayerViewModel
-                {
-                    Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    Position = PositionToString[p.Position],
-                })
-                .OrderBy(pvm => pvm.FirstName)
-                .ThenBy(pvm => pvm.LastName)
-                .AsNoTracking()
-                .ToList();
+            IEnumerable<PlayerViewModel> allPlayers = await _playerService
+                .GetAllPlayersOrderedByNameAsync();
 
             return View(allPlayers);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            Player? player = _dbContext.Players
-                .Include(p => p.Team)
-                .AsNoTracking()
-                .SingleOrDefault(p => p.Id == id);
+            PlayerDetailsViewModel? viewModel = await _playerService.GetPlayerDetailsByIdAsync(id);
 
-            if (player == null)
+            if (viewModel == null)
             {
                 return NotFound();
             }
-
-            PlayerDetailsViewModel viewModel = new PlayerDetailsViewModel
-            {
-                Id = player.Id,
-                FirstName = player.FirstName,
-                LastName = player.LastName,
-                Position = PositionToString[player.Position],
-                PointsPerGame = player.PointsPerGame,
-                ReboundsPerGame = player.ReboundsPerGame,
-                AssistsPerGame = player.AssistsPerGame,
-                TeamId = player.TeamId,
-                TeamName = player.Team.Name
-            };
 
             return View(viewModel);
         }
 
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            PlayerInputModel inputModel = new PlayerInputModel
-            {
-                Teams = LoadTeamsDropdown()
-            };
+            PlayerInputModel inputModel = await _playerService
+                .GetPlayerInputModelWithLoadedTeamsAsync();
 
             return View(inputModel);
         }
 
 
         [HttpPost]
-        public IActionResult Create(PlayerInputModel inputModel)
+        public async Task<IActionResult> Create(PlayerInputModel inputModel)
         {
-            inputModel.Teams = LoadTeamsDropdown();
+            inputModel.Teams = await _playerService.LoadTeamsDropdownAsync();
 
             if (!ModelState.IsValid)
             {
                 return View(inputModel);
             }
             
-            if(!TeamExists(inputModel.TeamId))
+            bool teamExists = inputModel.Teams
+                .Any(t => t.Id == inputModel.TeamId);
+
+            if (!teamExists)
             {
                 ModelState.AddModelError(nameof(inputModel.TeamId), "Selected team does not exist.");
                 
@@ -109,19 +83,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-                Player player = new Player
-                {
-                    FirstName = inputModel.FirstName,
-                    LastName = inputModel.LastName,
-                    Position = inputModel.Position,
-                    PointsPerGame = inputModel.PointsPerGame,
-                    ReboundsPerGame = inputModel.ReboundsPerGame,
-                    AssistsPerGame = inputModel.AssistsPerGame,
-                    TeamId = inputModel.TeamId
-                };
-
-                _dbContext.Players.Add(player);
-                _dbContext.SaveChanges();
+               await _playerService.CreatePlayerAsync(inputModel);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -134,62 +96,51 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            Player? player = _dbContext.Players
-                .Include(p => p.Team)
-                .AsNoTracking()
-                .SingleOrDefault(p => p.Id == id);
+            PlayerInputModel? inputModel = await _playerService
+                .GetPlayerInputModelWithLoadedTeamsAndPlayerDataAsync(id);
 
-            if (player == null)
+            if (inputModel == null)
             {
                 return NotFound();
             }
 
-            PlayerInputModel inputModel = new PlayerInputModel
-            {
-                FirstName = player.FirstName,
-                LastName = player.LastName,
-                Position = player.Position,
-                PointsPerGame = player.PointsPerGame,
-                ReboundsPerGame = player.ReboundsPerGame,
-                AssistsPerGame = player.AssistsPerGame,
-                TeamId = player.TeamId,
-                Teams = LoadTeamsDropdown()
-            };
             return View(inputModel);
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute] int id, PlayerInputModel inputModel)
+        public async Task<IActionResult> Edit([FromRoute] int id, PlayerInputModel inputModel)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            Player? selectedPlayer = _dbContext.Players
-                .Include(p => p.Team)
-                .SingleOrDefault(p => p.Id == id);
+            bool playerExists = await _playerService
+                .PlayerExistsAsync(id);
 
-            if (selectedPlayer == null)
+            if (!playerExists)
             {
                 return NotFound();
             }
 
-            inputModel.Teams = LoadTeamsDropdown();
+            inputModel.Teams = await _playerService.LoadTeamsDropdownAsync();
 
             if (!ModelState.IsValid)
             {
                 return View(inputModel);
             }
 
-            if (!TeamExists(inputModel.TeamId))
+            bool teamExists = inputModel.Teams
+                .Any(t => t.Id == inputModel.TeamId);
+
+            if (!teamExists)
             {
                 ModelState.AddModelError(nameof(inputModel.TeamId), "Selected team does not exist.");
 
@@ -205,16 +156,8 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-                selectedPlayer.FirstName = inputModel.FirstName;
-                selectedPlayer.LastName = inputModel.LastName;
-                selectedPlayer.Position = inputModel.Position;
-                selectedPlayer.PointsPerGame = inputModel.PointsPerGame;
-                selectedPlayer.ReboundsPerGame = inputModel.ReboundsPerGame;
-                selectedPlayer.AssistsPerGame = inputModel.AssistsPerGame;
-                selectedPlayer.TeamId = inputModel.TeamId;
+               await _playerService.EditPlayerAsync(id, inputModel);
 
-                _dbContext.SaveChanges();
-                
                 return RedirectToAction(nameof(Details), new { id });
             }
             catch (Exception ex)
@@ -226,53 +169,43 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            Player? player = _dbContext.Players
-                .Include(p => p.Team)
-                .AsNoTracking()
-                .SingleOrDefault(p => p.Id == id);
+            DeletePlayerViewModel deleteViewModel = await _playerService
+                .GetPlayerForDeleteByIdAsync(id);
 
-            if (player == null)
+            if (deleteViewModel == null)
             {
                 return NotFound();
             }
-
-            DeletePlayerViewModel deleteViewModel = new DeletePlayerViewModel
-            {
-                FirstName = player.FirstName,
-                LastName = player.LastName
-            };
 
             return View(deleteViewModel);
         }
 
         [HttpPost]
-        public IActionResult Delete([FromRoute]int id, DeletePlayerViewModel? viewModel)
+        public async Task<IActionResult> Delete([FromRoute]int id, DeletePlayerViewModel? viewModel)
         {
             if (id <= 0)
             {
                 return BadRequest();
             }
 
-            Player? selectedPlayer = _dbContext.Players
-                .Include(p => p.Team)
-                .SingleOrDefault(p => p.Id == id);
+            bool playerExists = await _playerService.
+                PlayerExistsAsync(id);
 
-            if (selectedPlayer == null)
+            if (!playerExists)
             {
                 return NotFound();
             }
 
             try
             {
-                _dbContext.Players.Remove(selectedPlayer);
-                _dbContext.SaveChanges();
+                await _playerService.DeletePlayerAsync(id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -283,52 +216,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
         }
 
-        
-        public IActionResult Search(string? name)
+        [HttpGet]
+        public async Task<IActionResult> Search(string? name)
         {
-            IQueryable<PlayerViewModel> playersQuery = _dbContext.Players
-               .Select(p => new PlayerViewModel
-               {
-                   Id = p.Id,
-                   FirstName = p.FirstName,
-                   LastName = p.LastName,
-                   Position = PositionToString[p.Position],
-               })
-               .AsNoTracking();
-
-
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                playersQuery = playersQuery
-                    .Where(p => p.FirstName.ToLower().Contains(name.ToLower()) 
-                    || p.LastName.ToLower().Contains(name.ToLower()));
-            }
-
-            IEnumerable<PlayerViewModel> filteredPlayers = playersQuery
-                .OrderBy(pvm => pvm.FirstName)
-                .ThenBy(pvm => pvm.LastName)
-                .ToList();
+            IEnumerable<PlayerViewModel> filteredPlayers = await _playerService
+                .SearchPlayerByFirstAndLastNameAsync(name);
 
             return View(nameof(Index), filteredPlayers);
-        }
-
-        private List<CreatePlayerTeamViewModel> LoadTeamsDropdown()
-        {
-           List<CreatePlayerTeamViewModel> loadedTeams = _dbContext.Teams
-                     .Select(t => new CreatePlayerTeamViewModel
-                     {
-                         Id = t.Id,
-                         Name = t.Name
-                     })
-                     .OrderBy(t => t.Name)
-                     .ToList();
-
-            return loadedTeams;
-        }
-
-        private bool TeamExists(int teamId)
-        {
-            return _dbContext.Teams.Any(t => t.Id == teamId);
         }
     }
 }

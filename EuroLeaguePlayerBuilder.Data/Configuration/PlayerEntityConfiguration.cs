@@ -1,7 +1,7 @@
-﻿using EuroLeaguePlayerBuilder.Models;
+﻿using EuroLeaguePlayerBuilder.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using EuroLeaguePlayerBuilder.Data.Enums;
+using EuroLeaguePlayerBuilder.GCommon.Enums;
 
 namespace EuroLeagueFantasy.Data.Configuration
 {

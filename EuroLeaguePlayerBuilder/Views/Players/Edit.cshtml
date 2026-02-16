@@ -5,6 +5,7 @@
 
 @{
     ViewData["Title"] = "Edit Player";
+    var playersIndexUrl = Url.Action("Index", "Players");
 }
 
 <div class="container mt-5">
@@ -75,7 +76,9 @@
                 Save Changes
             </button>
 
-            <a asp-action="Index" class="btn btn-outline-light">
+            <a href="@playersIndexUrl"
+               class="btn btn-outline-light"
+               onclick="if (document.referrer) { history.back(); } else { window.location='@playersIndexUrl'; } return false;">
                 Cancel
             </a>
         </div>
@@ -86,22 +89,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
-<style>
-    body {
-        background-color: #1e1e1e;
-    }
-
-    .text-orange {
-        color: darkorange !important;
-    }
-
-    table th,
-    table td {
-        vertical-align: middle;
-    }
-
-    .btn-warning {
-        font-weight: bold;
-    }
-</style>

@@ -1,0 +1,19 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
+@model IEnumerable<PlayerViewModel>
+
+@{
+    ViewData["Title"] = "My Players";
+}
+
+<h2 class="text-orange mb-4">My Players</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="text-orange text-center">
+        You have no players!
+    </div>
+}
+else
+{
+    <partial name="_PlayerPartial" model="Model" />
+}

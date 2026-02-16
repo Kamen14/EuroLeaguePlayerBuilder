@@ -32,6 +32,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     FirstName = p.FirstName,
                     LastName = p.LastName,
                     Position = PositionToString[p.Position],
+                    UserId = p.UserId
                 })
                 .OrderBy(pvm => pvm.FirstName)
                 .ThenBy(pvm => pvm.LastName)
@@ -93,7 +94,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             return loadedTeams;
         }
 
-        public async Task CreatePlayerAsync(PlayerInputModel inputModel)
+        public async Task CreatePlayerAsync(PlayerInputModel inputModel, string userId)
         {
             Player player = new Player
             {
@@ -103,7 +104,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 PointsPerGame = inputModel.PointsPerGame,
                 ReboundsPerGame = inputModel.ReboundsPerGame,
                 AssistsPerGame = inputModel.AssistsPerGame,
-                TeamId = inputModel.TeamId
+                TeamId = inputModel.TeamId,
+                UserId = userId
             };
 
             await _dbContext.Players.AddAsync(player);
@@ -131,7 +133,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 ReboundsPerGame = player.ReboundsPerGame,
                 AssistsPerGame = player.AssistsPerGame,
                 TeamId = player.TeamId,
-                Teams = await LoadTeamsDropdownAsync()
+                Teams = await LoadTeamsDropdownAsync(),
             };
 
             return inputModel;
@@ -209,6 +211,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                    FirstName = p.FirstName,
                    LastName = p.LastName,
                    Position = PositionToString[p.Position],
+                   UserId = p.UserId
                })
                .AsNoTracking();
 
@@ -226,6 +229,35 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 .ToListAsync();
 
             return filteredPlayers;
+        }
+
+        public  async Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId)
+        {
+            string? playerUserId = await _dbContext.Players
+                .AsNoTracking()
+                .Where(p => p.Id == playerId)
+                .Select(p => p.UserId)
+                .SingleOrDefaultAsync();
+
+            return playerUserId != null && playerUserId == userId;
+        }
+
+        public async Task<IEnumerable<PlayerViewModel>> GetUsersPlayers(string userId)
+        {
+            return await _dbContext.Players
+                .Where(p => p.UserId == userId)
+                .Select(p => new PlayerViewModel
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Position = PositionToString[p.Position],
+                    UserId = p.UserId
+                })
+                .AsNoTracking()
+                .OrderBy(pvm => pvm.FirstName)
+                .ThenBy(pvm => pvm.LastName)
+                .ToListAsync();
         }
     }
 }

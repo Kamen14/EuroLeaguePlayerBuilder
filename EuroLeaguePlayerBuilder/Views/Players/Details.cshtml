@@ -1,6 +1,10 @@
 ﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
 @model PlayerDetailsViewModel
 
+@{
+    var playersIndexUrl = Url.Action("Index", "Players");
+}
+
 <div class="container mt-5">
 
     <h2 class="text-orange mb-4">
@@ -44,27 +48,11 @@
     </table>
 
     <div class="mt-4">
-        <a asp-controller="Players" asp-action="Index" class="btn btn-outline-light">
-            Back to Players
+        <a href="@playersIndexUrl"
+           class="btn btn-outline-light"
+           onclick="if (document.referrer) { history.back(); } else { window.location='@playersIndexUrl'; } return false;">
+            Back
         </a>
     </div>
 </div>
 
-<style>
-    body {
-        background-color: #1e1e1e;
-    }
-
-    .text-orange {
-        color: darkorange !important;
-    }
-
-    table th,
-    table td {
-        vertical-align: middle;
-    }
-
-    .btn-warning {
-        font-weight: bold;
-    }
-</style>

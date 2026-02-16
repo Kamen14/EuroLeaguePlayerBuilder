@@ -1,36 +1,34 @@
 ﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
 @model DeletePlayerViewModel
 
+@{
+    var playersIndexUrl = Url.Action("Index", "Players");
+    var referrer = ViewContext?.HttpContext?.Request?.Headers["Referer"].ToString();
+}
+
 <div class="container mt-5">
-    <div class="card bg-dark text-white">
+    <div class="bg-dark text-white">
         <div class="card-body">
             <h3 class="card-title text-warning">Confirm Delete</h3>
             <p>Are you sure you want to delete player <strong>@Model.FirstName @Model.LastName</strong>?</p>
 
             <form asp-action="Delete" asp-controller="Players" method="post">
                 @*<input type="hidden" asp-for="Id" />*@
-                <button type="submit" class="btn btn-danger me-2">Delete</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+                <input type="hidden" id="returnUrlField" name="returnUrl" value="@referrer" />
+
+                <button type="submit"
+                        class="btn btn-danger me-2"
+                        onclick="if (document.referrer) { document.getElementById('returnUrlField').value = document.referrer; }">
+                    Delete
+                </button>
+
+                <a href="@playersIndexUrl"
+                   class="btn btn-secondary"
+                   onclick="if (document.referrer) { history.back(); } else { window.location='@playersIndexUrl'; } return false;">
+                    Cancel
+                </a>
             </form>
         </div>
     </div>
 </div>
-
-<style>
-    body {
-        background-color: #1e1e1e;
-    }
-
-    .text-orange {
-        color: darkorange !important;
-    }
-
-    table th,
-    table td {
-        vertical-align: middle;
-    }
-
-    .btn-warning {
-        font-weight: bold;
-    }
-</style>

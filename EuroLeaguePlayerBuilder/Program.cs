@@ -22,7 +22,10 @@ namespace EuroLeaguePlayerBuilder
             builder.Services.AddScoped<ICoachService, CoachService>();
             builder.Services.AddScoped<ITeamService, TeamService>();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                ConfigureIdentity(options);
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -53,6 +56,25 @@ namespace EuroLeaguePlayerBuilder
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static void ConfigureIdentity(IdentityOptions identityOptions)
+        {
+            identityOptions.SignIn.RequireConfirmedAccount = false;
+            identityOptions.SignIn.RequireConfirmedEmail = false;
+            identityOptions.SignIn.RequireConfirmedPhoneNumber = false;
+
+            identityOptions.User.RequireUniqueEmail = true;
+
+            identityOptions.Lockout.MaxFailedAccessAttempts = 200;
+            identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+
+            identityOptions.Password.RequireDigit = true;
+            identityOptions.Password.RequireLowercase = false;
+            identityOptions.Password.RequireNonAlphanumeric = false;
+            identityOptions.Password.RequireUppercase = false;
+            identityOptions.Password.RequiredLength = 6;
+            identityOptions.Password.RequiredUniqueChars = 0;
         }
     }
 }

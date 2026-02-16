@@ -39,6 +39,25 @@
                 </div>
             }
         </div>
+
+        <!-- Register/Login Buttons (Only if not authenticated) -->
+        @if (User.Identity?.IsAuthenticated == false)
+        {
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a asp-area="Identity"
+                   asp-page="/Account/Register"
+                   class="btn btn-outline-light px-4">
+                    Register
+                </a>
+
+                <a asp-area="Identity"
+                   asp-page="/Account/Login"
+                   class="btn btn-outline-light px-4">
+                    Login
+                </a>
+            </div>
+        }
+
     </div>
 
     <style>

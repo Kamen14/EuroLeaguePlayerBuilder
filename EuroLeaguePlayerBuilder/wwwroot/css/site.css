@@ -18,5 +18,55 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #1e1e1e;
+}
+
+
+.text-orange {
+    color: darkorange !important;
+}
+
+table th,
+table td {
+    vertical-align: middle;
+}
+
+.btn-warning {
+    font-weight: bold;
+}
+
+.team-logo {
+    height: 120px; /* same height for all logos */
+    object-fit: contain; /* keeps aspect ratio */
+}
+
+.card {
+    min-height: 200px;
+}
+
+.card:hover {
+     transform: scale(1.03);
+     transition: transform 0.2s ease-in-out;
+}
+
+h3, h2, h1, h4 {
+    color: darkorange;
+}
+
+h1{
+    margin-bottom: 2rem;
+}
+
+#registerSubmit, #login-submit{
+    background-color: darkorange;
+    border-color: darkorange;
+}
+
+.col-md-6 > p{
+    color: white
+}
+
+#delete{
+    margin-top: 1rem;
 }

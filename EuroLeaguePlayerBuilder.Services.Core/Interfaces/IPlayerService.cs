@@ -17,7 +17,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 
         Task<IEnumerable<CreatePlayerTeamViewModel>> LoadTeamsDropdownAsync();
 
-        Task CreatePlayerAsync(PlayerInputModel inputModel);
+        Task CreatePlayerAsync(PlayerInputModel inputModel, string userId);
 
         Task <PlayerInputModel> GetPlayerInputModelWithLoadedTeamsAndPlayerDataAsync(int id);
 
@@ -31,5 +31,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 
         Task<IEnumerable<PlayerViewModel>> SearchPlayerByFirstAndLastNameAsync(string? name);
 
+        Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId);
+
+        Task<IEnumerable<PlayerViewModel>> GetUsersPlayers(string userId);
     }
 }

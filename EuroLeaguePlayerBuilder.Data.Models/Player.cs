@@ -1,6 +1,7 @@
 ﻿namespace EuroLeaguePlayerBuilder.Data.Models
 {
     using EuroLeaguePlayerBuilder.GCommon.Enums;
+    using Microsoft.AspNetCore.Identity;
     using System.ComponentModel.DataAnnotations;
 
     using static GCommon.EntityValidation.Player;
@@ -33,5 +34,9 @@
         public int TeamId { get; set; }
 
         public virtual Team Team { get; set; } = null!;
+
+        public string? UserId { get; set; }
+
+        public IdentityUser? User { get; set; }
     }
 }

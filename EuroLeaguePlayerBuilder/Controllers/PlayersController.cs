@@ -1,13 +1,16 @@
 ﻿using EuroLeaguePlayerBuilder.GCommon.Enums;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.ViewModels.Players;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
+    [Authorize]
     public class PlayersController : Controller
     {
         private readonly IPlayerService _playerService;
@@ -17,6 +20,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             _playerService = playerService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -63,14 +67,14 @@ namespace EuroLeaguePlayerBuilder.Controllers
             {
                 return View(inputModel);
             }
-            
+
             bool teamExists = inputModel.Teams
                 .Any(t => t.Id == inputModel.TeamId);
 
             if (!teamExists)
             {
                 ModelState.AddModelError(nameof(inputModel.TeamId), "Selected team does not exist.");
-                
+
                 return View(inputModel);
             }
 
@@ -83,7 +87,9 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-               await _playerService.CreatePlayerAsync(inputModel);
+                string? userId = GetUserId();
+
+                await _playerService.CreatePlayerAsync(inputModel, userId!);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -111,6 +117,12 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            string? userId = GetUserId();
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            {
+                return Forbid();
+            }
+
             return View(inputModel);
         }
 
@@ -128,6 +140,12 @@ namespace EuroLeaguePlayerBuilder.Controllers
             if (!playerExists)
             {
                 return NotFound();
+            }
+
+            string? userId = GetUserId();
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            {
+                return Forbid();
             }
 
             inputModel.Teams = await _playerService.LoadTeamsDropdownAsync();
@@ -156,7 +174,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-               await _playerService.EditPlayerAsync(id, inputModel);
+                await _playerService.EditPlayerAsync(id, inputModel);
 
                 return RedirectToAction(nameof(Details), new { id });
             }
@@ -184,11 +202,17 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            string? userId = GetUserId();
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            {
+                return Forbid();
+            }
+
             return View(deleteViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromRoute]int id, DeletePlayerViewModel? viewModel)
+        public async Task<IActionResult> Delete([FromRoute] int id, DeletePlayerViewModel? viewModel, string? returnUrl)
         {
             if (id <= 0)
             {
@@ -203,9 +227,20 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            string? userId = GetUserId();
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            {
+                return Forbid();
+            }
+
             try
             {
                 await _playerService.DeletePlayerAsync(id);
+
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -216,6 +251,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Search(string? name)
         {
@@ -223,6 +259,20 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 .SearchPlayerByFirstAndLastNameAsync(name);
 
             return View(nameof(Index), filteredPlayers);
+        }
+
+        public async Task<IActionResult> MyPlayers()
+        {
+            string? userId = GetUserId();
+            IEnumerable<PlayerViewModel> userPlayers = await _playerService
+                .GetUsersPlayers(userId!);
+
+            return View(userPlayers);
+        }
+
+        private string? GetUserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }

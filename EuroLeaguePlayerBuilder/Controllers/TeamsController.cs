@@ -8,9 +8,11 @@ using EuroLeaguePlayerBuilder.ViewModels.Coaches;
 using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
+    [Authorize]
     public class TeamsController : Controller
     {
         private readonly ITeamService _teamService;
@@ -19,6 +21,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             _teamService = teamService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {

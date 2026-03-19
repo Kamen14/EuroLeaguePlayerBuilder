@@ -9,23 +9,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using EuroLeaguePlayerBuilder.Data.Models;
+using EuroLeaguePlayerBuilder.Data.Repositories;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
     public class PlayerService : IPlayerService
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly PlayerRepository _playerRepository;
 
         public PlayerService(ApplicationDbContext dbContext)
         {
-            _dbContext = dbContext;
+            _playerRepository = new PlayerRepository(dbContext);
         }
 
 
         public async Task<IEnumerable<PlayerViewModel>> GetAllPlayersOrderedByNameAsync()
         {
-            IEnumerable<PlayerViewModel> allPlayers = await _dbContext.Players
-                .AsNoTracking()
+            IEnumerable<PlayerViewModel> allPlayers = await _playerRepository
+                .GetAllPlayersNoTracking()
                 .Select(p => new PlayerViewModel
                 {
                     Id = p.Id,
@@ -43,10 +44,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task<PlayerDetailsViewModel> GetPlayerDetailsByIdAsync(int id)
         {
-            Player? player = await _dbContext.Players
-                .Include(p => p.Team)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Id == id);
+            Player? player = await _playerRepository
+                .GetPlayerWithTeamByIdNoTrackingAsync(id);
 
             if (player == null)
             {
@@ -81,8 +80,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task<IEnumerable<CreatePlayerTeamViewModel>> LoadTeamsDropdownAsync()
         {
-            IEnumerable<CreatePlayerTeamViewModel> loadedTeams = await _dbContext.Teams
-                .AsNoTracking()
+            IEnumerable<CreatePlayerTeamViewModel> loadedTeams = await _playerRepository
+                .GetAllTeamsNoTracking()
                      .Select(t => new CreatePlayerTeamViewModel
                      {
                          Id = t.Id,
@@ -108,16 +107,18 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 UserId = userId
             };
 
-            await _dbContext.Players.AddAsync(player);
-            await _dbContext.SaveChangesAsync();
+                bool successfullyAdded = await _playerRepository.AddPlayerAsync(player);
+
+                if(!successfullyAdded)
+                {
+                    throw new DbUpdateException("An error occurred while adding the player to the database.");
+                }
         }
 
         public async Task<PlayerInputModel> GetPlayerInputModelWithLoadedTeamsAndPlayerDataAsync(int id)
         {
-            Player? player = await _dbContext.Players
-                .Include(p => p.Team)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Id == id);
+            Player? player = await _playerRepository
+                .GetPlayerWithTeamByIdNoTrackingAsync(id);
 
             if (player == null)
             {
@@ -141,7 +142,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task<bool> PlayerExistsAsync(int id)
         {
-            bool selectedPlayerExists = await _dbContext.Players
+            bool selectedPlayerExists = await _playerRepository
+                .GetAllPlayersNoTracking()
                 .AnyAsync(p => p.Id == id);
 
             return selectedPlayerExists;
@@ -149,7 +151,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task EditPlayerAsync(int id, PlayerInputModel inputModel)
         {
-            Player? selectedPlayer = await _dbContext.Players
+            Player? selectedPlayer = await _playerRepository
+                .GetAllPlayers()
                 .SingleOrDefaultAsync(p => p.Id == id);
 
             if(selectedPlayer == null)
@@ -165,13 +168,13 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             selectedPlayer.AssistsPerGame = inputModel.AssistsPerGame;
             selectedPlayer.TeamId = inputModel.TeamId;
 
-            _dbContext.Players.Update(selectedPlayer);
-            await _dbContext.SaveChangesAsync();
+            await _playerRepository.UpdatePlayerAsync(selectedPlayer);
         }
 
         public async Task<DeletePlayerViewModel> GetPlayerForDeleteByIdAsync(int id)
         {
-            Player? player = await _dbContext.Players
+            Player? player = await _playerRepository
+               .GetAllPlayers()
                .SingleOrDefaultAsync(p => p.Id == id);
 
             if (player == null)
@@ -190,7 +193,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task DeletePlayerAsync(int id)
         {
-            Player? selectedPlayer = await _dbContext.Players
+            Player? selectedPlayer = await _playerRepository
+                .GetAllPlayers()
                 .SingleOrDefaultAsync(p => p.Id == id);
 
             if (selectedPlayer == null)
@@ -198,13 +202,13 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 throw new ArgumentException("Player with the provided ID does not exist.");
             }
 
-            _dbContext.Players.Remove(selectedPlayer);
-            await _dbContext.SaveChangesAsync();
+            await _playerRepository.DeletePlayerAsync(selectedPlayer);
         }
 
         public async Task<IEnumerable<PlayerViewModel>> SearchPlayerByFirstAndLastNameAsync(string? name)
         {
-            IQueryable<PlayerViewModel> playersQuery = _dbContext.Players
+            IQueryable<PlayerViewModel> playersQuery = _playerRepository
+                .GetAllPlayersNoTracking()
                .Select(p => new PlayerViewModel
                {
                    Id = p.Id,
@@ -212,8 +216,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                    LastName = p.LastName,
                    Position = PositionToString[p.Position],
                    UserId = p.UserId
-               })
-               .AsNoTracking();
+               });
 
 
             if (!string.IsNullOrWhiteSpace(name))
@@ -233,8 +236,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public  async Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId)
         {
-            string? playerUserId = await _dbContext.Players
-                .AsNoTracking()
+            string? playerUserId = await _playerRepository
+                .GetAllPlayersNoTracking()
                 .Where(p => p.Id == playerId)
                 .Select(p => p.UserId)
                 .SingleOrDefaultAsync();
@@ -244,7 +247,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task<IEnumerable<PlayerViewModel>> GetUsersPlayers(string userId)
         {
-            return await _dbContext.Players
+            return await _playerRepository
+                .GetAllPlayersNoTracking()
                 .Where(p => p.UserId == userId)
                 .Select(p => new PlayerViewModel
                 {
@@ -254,7 +258,6 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     Position = PositionToString[p.Position],
                     UserId = p.UserId
                 })
-                .AsNoTracking()
                 .OrderBy(pvm => pvm.FirstName)
                 .ThenBy(pvm => pvm.LastName)
                 .ToListAsync();

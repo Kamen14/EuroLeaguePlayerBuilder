@@ -1,4 +1,6 @@
 using EuroLeaguePlayerBuilder.Data;
+using EuroLeaguePlayerBuilder.Data.Repositories;
+using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +19,8 @@ namespace EuroLeaguePlayerBuilder
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
             builder.Services.AddScoped<IPlayerService, PlayerService>();
             builder.Services.AddScoped<ICoachService, CoachService>();

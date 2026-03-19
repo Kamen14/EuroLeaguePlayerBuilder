@@ -93,7 +93,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(string.Empty, "An error occurred while creating the player. Please try again.");
 
@@ -178,7 +178,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
                 return RedirectToAction(nameof(Details), new { id });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError(string.Empty, "An error occured while editing the player. Please try again.");
 

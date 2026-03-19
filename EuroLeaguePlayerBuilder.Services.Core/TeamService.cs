@@ -75,6 +75,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     FirstName = p.FirstName,
                     LastName = p.LastName,
                     Position = PositionToString[p.Position],
+                    UserId = p.UserId,
                 })
                 .OrderBy(pvm => pvm.FirstName)
                 .ToList()

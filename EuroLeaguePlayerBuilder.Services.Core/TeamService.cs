@@ -12,23 +12,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EuroLeaguePlayerBuilder.ViewModels.Home;
+using EuroLeaguePlayerBuilder.Data.Repositories;
+using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
     public class TeamService : ITeamService
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ITeamRepository _teamRepository;
 
-        public TeamService(ApplicationDbContext dbContext)
+        public TeamService(ITeamRepository teamRepository)
         {
-            _dbContext = dbContext;
+            _teamRepository = teamRepository;
         }
 
         public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
         {
-            IEnumerable<TeamViewModel> allTeams = await _dbContext.Teams
-                .Include(t => t.Players)
-                .AsNoTracking()
+            IEnumerable<TeamViewModel> allTeams = await _teamRepository
+                .GetAllTeamsWithPlayersNoTracking()
                 .Select(t => new TeamViewModel
                 {
                     Id = t.Id,
@@ -46,11 +47,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task<TeamDetailsViewModel> GetTeamDetailsByIdAsync(int id)
         {
-            Team? team = await _dbContext.Teams
-                .Include(t => t.Coach)
-                .Include(t => t.Players)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(t => t.Id == id);
+            Team? team = await _teamRepository
+                .GetTeamWithPlayersAndCoachByIdNoTrackingAsync(id);
 
             if(team == null)
             {
@@ -86,9 +84,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
         public async Task<IEnumerable<HomePageTeamViewModel>> GetTeamsForHomePageAsync()
         {
-            IEnumerable<HomePageTeamViewModel> teams = await _dbContext
-                .Teams
-                .AsNoTracking()
+            IEnumerable<HomePageTeamViewModel> teams = await _teamRepository
+                .GetAllTeamsNoTracking()
                 .Select(t => new HomePageTeamViewModel
                 {
                     Id = t.Id,

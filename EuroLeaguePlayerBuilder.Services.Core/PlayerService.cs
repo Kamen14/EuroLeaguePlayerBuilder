@@ -10,16 +10,17 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Data.Repositories;
+using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
     public class PlayerService : IPlayerService
     {
-        private readonly PlayerRepository _playerRepository;
+        private readonly IPlayerRepository _playerRepository;
 
-        public PlayerService(ApplicationDbContext dbContext)
+        public PlayerService(IPlayerRepository playerRepository)
         {
-            _playerRepository = new PlayerRepository(dbContext);
+            _playerRepository = playerRepository;
         }
 
 

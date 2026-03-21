@@ -21,6 +21,7 @@ namespace EuroLeaguePlayerBuilder
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+            builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 
             builder.Services.AddScoped<IPlayerService, PlayerService>();
             builder.Services.AddScoped<ICoachService, CoachService>();

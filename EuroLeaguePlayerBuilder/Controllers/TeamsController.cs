@@ -16,7 +16,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
     public class TeamsController : Controller
     {
         private readonly ITeamService _teamService;
-        public TeamsController(ApplicationDbContext dbContext, ITeamService teamService)
+        public TeamsController(ITeamService teamService)
         {
             _teamService = teamService;
         }

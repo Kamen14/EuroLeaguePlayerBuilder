@@ -1,4 +1,5 @@
 ﻿using EuroLeaguePlayerBuilder.Data;
+using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.ViewModels.Coaches;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +13,17 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 {
     public class CoachService : ICoachService
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ITeamRepository _teamRepository;
 
-        public CoachService(ApplicationDbContext dbContext)
+        public CoachService(ITeamRepository teamRepository)
         {
-            _dbContext = dbContext;
+            _teamRepository = teamRepository;
         }
 
         public async Task<IEnumerable<AllCoachesViewModel>> GetAllCoachesWithTeamsAsync()
         {
-            IEnumerable<AllCoachesViewModel> coaches =  await _dbContext
-                .Teams
+            IEnumerable<AllCoachesViewModel> coaches = await _teamRepository
+                .GetAllTeamsNoTracking()
                 .Select(t => new AllCoachesViewModel
                 {
                     FirstName = t.Coach.FirstName,
@@ -31,7 +32,6 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     TeamId = t.Id,
                     TeamLogoPath = t.LogoPath
                 })
-                .AsNoTracking()
                 .ToListAsync();
 
             return coaches;

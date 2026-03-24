@@ -5,9 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EuroLeaguePlayerBuilder.Data.Repositories
 {
-    public class PlayerRepository : IPlayerRepository
+    public class PlayerRepository : IPlayerRepository, IDisposable
     {
         private readonly ApplicationDbContext _dbContext;
+        private bool disposed = false;
 
         public PlayerRepository(ApplicationDbContext dbContext)
         {
@@ -56,6 +57,25 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
         {
             _dbContext.Players.Remove(selectedPlayer);
             await _dbContext.SaveChangesAsync();
+        }
+
+        // Dispose pattern implementation
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

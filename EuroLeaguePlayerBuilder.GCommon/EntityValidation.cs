@@ -33,5 +33,20 @@
             public const int MinAssistsPerGame = 0;
             public const int MaxAssistsPerGame = 20;
         }
+
+        public static class Arena
+        {
+            public const int ArenaNameMinLength = 2;
+            public const int ArenaNameMaxLength = 100;
+
+            public const int ArenaCityMinLength = 2;
+            public const int ArenaCityMaxLength = 70;
+
+            public const int ArenaCountryMinLength = 2;
+            public const int ArenaCountryMaxLength = 70;
+
+            public const int MinArenaCapacity = 1000;
+            public const int MaxArenaCapacity = 50000;
+        }
     }
 }

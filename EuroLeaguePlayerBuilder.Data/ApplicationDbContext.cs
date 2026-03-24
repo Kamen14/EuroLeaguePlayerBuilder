@@ -17,6 +17,8 @@ namespace EuroLeaguePlayerBuilder.Data
 
         public virtual DbSet<Player> Players { get; set; } = null!;
 
+        public virtual DbSet<Arena> Arenas { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

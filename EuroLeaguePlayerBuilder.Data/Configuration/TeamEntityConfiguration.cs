@@ -1,6 +1,7 @@
 ﻿using EuroLeaguePlayerBuilder.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static EuroLeaguePlayerBuilder.GCommon.ImageConstants.TeamImages;
 
 namespace EuroLeagueFantasy.Data.Configuration
 {
@@ -8,14 +9,15 @@ namespace EuroLeagueFantasy.Data.Configuration
     {
         private readonly IEnumerable<Team> Teams = new List<Team>()
         {
-            new Team
+                new Team
                 {
                     Id = 1,
                     Name = "Panathinaikos",
                     Country = "Greece",
                     City = "Athens",
-                    LogoPath = "/images/panathinaikos.svg.png",
-                    CoachId = 1 // Dimitris Itoudis
+                    LogoPath = PanathinaikosLogo, //"/images/panathinaikos.svg.png",
+                    CoachId = 1, // Dimitris Itoudis
+                    ArenaId = 1 // OAKA
                 },
                 new Team
                 {
@@ -23,8 +25,9 @@ namespace EuroLeagueFantasy.Data.Configuration
                     Name = "Olympiacos",
                     Country = "Greece",
                     City = "Piraeus",
-                    LogoPath = "/images/olympiacos.svg.png",
-                    CoachId = 2 // Georgios Bartzokas
+                    LogoPath = OlympiacosLogo, // "/images/olympiacos.svg.png",
+                    CoachId = 2, // Georgios Bartzokas
+                    ArenaId = 2 // Peace and Friendship Stadium
                 },
                 new Team
                 {
@@ -32,8 +35,9 @@ namespace EuroLeagueFantasy.Data.Configuration
                     Name = "Real Madrid",
                     Country = "Spain",
                     City = "Madrid",
-                    LogoPath = "/images/real_madrid.svg.png",
-                    CoachId = 3 // Pablo Laso
+                    LogoPath = RealMadridLogo, // "/images/real_madrid.svg.png",
+                    CoachId = 3, // Pablo Laso
+                    ArenaId = 3 // WiZink Center
                 },
                 new Team
                 {
@@ -41,8 +45,9 @@ namespace EuroLeagueFantasy.Data.Configuration
                     Name = "Barcelona",
                     Country = "Spain",
                     City = "Barcelona",
-                    LogoPath = "/images/barcelona.svg.png",
-                    CoachId = 4 // Sarunas Jasikevicius
+                    LogoPath = BarcelonaLogo, // "/images/barcelona.svg.png",
+                    CoachId = 4, // Sarunas Jasikevicius
+                    ArenaId = 4 // Palau Blaugrana
                 },
                 new Team
                 {
@@ -50,8 +55,9 @@ namespace EuroLeagueFantasy.Data.Configuration
                     Name = "Crvena Zvezda",
                     Country = "Serbia",
                     City = "Belgrade",
-                    LogoPath = "/images/crvena_zvezda.svg.png",
-                    CoachId = 5 // Dejan Radonjic
+                    LogoPath = CrvenaZvezdaLogo, // "/images/crvena_zvezda.svg.png",
+                    CoachId = 5, // Dejan Radonjic
+                    ArenaId = 5 // Belgrade Arena
                 },
                 new Team
                 {
@@ -59,8 +65,9 @@ namespace EuroLeagueFantasy.Data.Configuration
                     Name = "Partizan",
                     Country = "Serbia",
                     City = "Belgrade",
-                    LogoPath = "/images/partizan.svg.png",
-                    CoachId = 6 // Zvezdan Mitrovic
+                    LogoPath = PartizanLogo, // "/images/partizan.svg.png",
+                    CoachId = 6, // Zvezdan Mitrovic
+                    ArenaId = 5 // Belgrade Arena
                 }
         };
         

@@ -19,11 +19,32 @@ namespace EuroLeaguePlayerBuilder.Data
 
         public virtual DbSet<Arena> Arenas { get; set; } = null!;
 
+        public virtual DbSet<Game> Games { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+            modelBuilder.Entity<Team>()
+                .HasOne(t => t.Arena)
+                .WithMany()
+                .HasForeignKey(p => p.ArenaId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.TeamOne)
+                .WithMany()
+                .HasForeignKey(g => g.TeamOneId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.TeamTwo)
+                .WithMany()
+                .HasForeignKey(g => g.TeamTwoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

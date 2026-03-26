@@ -28,10 +28,9 @@ namespace EuroLeaguePlayerBuilder.Data.Models
 
         public virtual Coach Coach { get; set; } = null!;
 
-        [Required]
-        public int ArenaId { get; set; }
+        public int? ArenaId { get; set; }
 
-        public virtual Arena Arena { get; set; } = null!;
+        public virtual Arena? Arena { get; set; } = null!;
 
         public virtual ICollection<Player> Players { get; set; } = new List<Player>();
     }

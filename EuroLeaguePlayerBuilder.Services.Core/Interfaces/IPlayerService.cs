@@ -1,38 +1,33 @@
-﻿using EuroLeaguePlayerBuilder.ViewModels.Players;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EuroLeaguePlayerBuilder.Services.Models.Players;
 
 namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 {
     public interface IPlayerService 
     {
-        Task<IEnumerable<PlayerViewModel>> GetAllPlayersOrderedByNameAsync();
+        Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync();
 
-        Task<PlayerDetailsViewModel> GetPlayerDetailsByIdAsync(int id);
+        Task<PlayerDetailsDto> GetPlayerDetailsByIdAsync(int id);
 
-        Task<PlayerInputModel> GetPlayerInputModelWithLoadedTeamsAsync();
+        Task<PlayerInputDto> GetPlayerInputModelWithLoadedTeamsAsync();
 
-        Task<IEnumerable<CreatePlayerTeamViewModel>> LoadTeamsDropdownAsync();
+        Task<IEnumerable<CreatePlayerTeamDto>> LoadTeamsDropdownAsync();
 
-        Task CreatePlayerAsync(PlayerInputModel inputModel, string userId);
+        Task CreatePlayerAsync(PlayerInputDto inputDto, string userId);
 
-        Task <PlayerInputModel> GetPlayerInputModelWithLoadedTeamsAndPlayerDataAsync(int id);
+        Task <PlayerInputDto> GetPlayerInputModelWithLoadedTeamsAndPlayerDataAsync(int id);
 
         Task<bool> PlayerExistsAsync(int id);
 
-        Task EditPlayerAsync(int id, PlayerInputModel inputModel);
+        Task EditPlayerAsync(int id, PlayerInputDto inputDto);
 
-        Task<DeletePlayerViewModel> GetPlayerForDeleteByIdAsync(int id);
+        Task<DeletePlayerDto> GetPlayerForDeleteByIdAsync(int id);
 
         Task DeletePlayerAsync(int id);
 
-        Task<IEnumerable<PlayerViewModel>> SearchPlayerByFirstAndLastNameAsync(string? name);
+        Task<IEnumerable<PlayerDto>> SearchPlayerByFirstAndLastNameAsync(string? name);
 
         Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId);
 
-        Task<IEnumerable<PlayerViewModel>> GetUsersPlayers(string userId);
+        Task<IEnumerable<PlayerDto>> GetUsersPlayers(string userId);
     }
 }

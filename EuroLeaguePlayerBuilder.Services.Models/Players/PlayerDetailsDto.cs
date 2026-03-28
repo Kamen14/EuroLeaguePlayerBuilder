@@ -1,6 +1,6 @@
-﻿namespace EuroLeaguePlayerBuilder.ViewModels.Players
+﻿namespace EuroLeaguePlayerBuilder.Services.Models.Players
 {
-    public class PlayerDetailsViewModel
+    public class PlayerDetailsDto
     {
         public string FirstName { get; set; } = null!;
 

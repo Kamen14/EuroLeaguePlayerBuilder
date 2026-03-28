@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EuroLeaguePlayerBuilder.GCommon\EuroLeaguePlayerBuilder.GCommon.csproj" />
     <ProjectReference Include="..\EuroLeaguePlayerBuilder.Services.Core\EuroLeaguePlayerBuilder.Services.Core.csproj" />
+    <ProjectReference Include="..\EuroLeaguePlayerBuilder.Services.Models\EuroLeaguePlayerBuilder.Services.Models.csproj" />
     <ProjectReference Include="..\EuroLeaguePlayerBuilder.ViewModels\EuroLeaguePlayerBuilder.ViewModels.csproj" />
   </ItemGroup>
 

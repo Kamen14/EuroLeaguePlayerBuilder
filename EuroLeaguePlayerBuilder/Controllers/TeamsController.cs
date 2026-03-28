@@ -1,14 +1,10 @@
-﻿using EuroLeaguePlayerBuilder.Data;
-using EuroLeaguePlayerBuilder.Data.Models;
-using EuroLeaguePlayerBuilder.ViewModels.Teams;
-using EuroLeaguePlayerBuilder.ViewModels.Players;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
+using EuroLeaguePlayerBuilder.Services.Models.Teams;
 using EuroLeaguePlayerBuilder.ViewModels.Coaches;
-using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
-using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
-using EuroLeaguePlayerBuilder.Services.Core;
+using EuroLeaguePlayerBuilder.ViewModels.Players;
+using EuroLeaguePlayerBuilder.ViewModels.Teams;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -25,10 +21,21 @@ namespace EuroLeaguePlayerBuilder.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<TeamViewModel> allTeams = await _teamService
+            IEnumerable<TeamDto> allTeams = await _teamService
                 .GetAllTeamsAsync();
 
-            return View(allTeams);
+            IEnumerable<TeamViewModel> teamViewModels = allTeams
+                .Select(t => new TeamViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                City = t.City,
+                Country = t.Country,
+                LogoPath = t.LogoPath,
+                PlayersCount = t.PlayersCount
+            });
+
+            return View(teamViewModels);
         }
 
         [HttpGet]
@@ -39,7 +46,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return BadRequest();
             }
 
-            TeamDetailsViewModel teamDetails = await _teamService
+            TeamDetailsDto teamDetails = await _teamService
                 .GetTeamDetailsByIdAsync(id);
 
             if (teamDetails == null)
@@ -47,7 +54,30 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
-            return View(teamDetails);
+            TeamDetailsViewModel teamDetailsViewModel = new TeamDetailsViewModel
+            {
+                Name = teamDetails.Name,
+                LogoPath = teamDetails.LogoPath,
+                Coach = new CoachViewModel
+                {
+                    Id = teamDetails.Coach.Id,
+                    FirstName = teamDetails.Coach.FirstName,
+                    LastName = teamDetails.Coach.LastName,
+                    TitlesWon = teamDetails.Coach.TitlesWon
+                },
+                Players = teamDetails.Players!.Select(p => new PlayerViewModel
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Position = p.Position,
+                    UserId = p.UserId,
+                })
+               .OrderBy(pvm => pvm.FirstName)
+               .ToList()
+            };
+
+            return View(teamDetailsViewModel);
         }
     }
 }

@@ -1,19 +1,13 @@
-﻿using EuroLeaguePlayerBuilder.ViewModels.Home;
-using EuroLeaguePlayerBuilder.ViewModels.Teams;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EuroLeaguePlayerBuilder.Services.Models.Teams;
 
 namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 {
     public interface ITeamService
     {
-        Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync();
+        Task<IEnumerable<TeamDto>> GetAllTeamsAsync();
 
-        Task<TeamDetailsViewModel> GetTeamDetailsByIdAsync(int id);
+        Task<TeamDetailsDto> GetTeamDetailsByIdAsync(int id);
 
-        Task<IEnumerable<HomePageTeamViewModel>> GetTeamsForHomePageAsync();
+        Task<IEnumerable<HomePageTeamDto>> GetTeamsForHomePageAsync();
     }
 }

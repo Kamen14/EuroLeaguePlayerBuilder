@@ -1,19 +1,11 @@
-﻿using EuroLeaguePlayerBuilder.Data;
-using EuroLeaguePlayerBuilder.Data.Models;
+﻿using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
-using EuroLeaguePlayerBuilder.ViewModels.Coaches;
-using EuroLeaguePlayerBuilder.ViewModels.Players;
-using EuroLeaguePlayerBuilder.ViewModels.Teams;
 using Microsoft.EntityFrameworkCore;
 using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EuroLeaguePlayerBuilder.ViewModels.Home;
-using EuroLeaguePlayerBuilder.Data.Repositories;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
+using EuroLeaguePlayerBuilder.Services.Models.Teams;
+using EuroLeaguePlayerBuilder.Services.Models.Coaches;
+using EuroLeaguePlayerBuilder.Services.Models.Players;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -26,11 +18,11 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             _teamRepository = teamRepository;
         }
 
-        public async Task<IEnumerable<TeamViewModel>> GetAllTeamsAsync()
+        public async Task<IEnumerable<TeamDto>> GetAllTeamsAsync()
         {
-            IEnumerable<TeamViewModel> allTeams = await _teamRepository
+            IEnumerable<TeamDto> allTeams = await _teamRepository
                 .GetAllTeamsWithPlayersNoTracking()
-                .Select(t => new TeamViewModel
+                .Select(t => new TeamDto
                 {
                     Id = t.Id,
                     Name = t.Name,
@@ -45,7 +37,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             return allTeams;
         }
 
-        public async Task<TeamDetailsViewModel> GetTeamDetailsByIdAsync(int id)
+        public async Task<TeamDetailsDto> GetTeamDetailsByIdAsync(int id)
         {
             Team? team = await _teamRepository
                 .GetTeamWithPlayersAndCoachByIdNoTrackingAsync(id);
@@ -55,19 +47,19 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 return null;
             }
 
-            TeamDetailsViewModel teamDetails = new TeamDetailsViewModel
+            TeamDetailsDto teamDetails = new TeamDetailsDto
             {
 
                 Name = team.Name,
                 LogoPath = team.LogoPath,
-                Coach = new CoachViewModel
+                Coach = new CoachDto
                 {
                     Id = team.Coach.Id,
                     FirstName = team.Coach.FirstName,
                     LastName = team.Coach.LastName,
                     TitlesWon = team.Coach.TitlesWon
                 },
-                Players = team.Players.Select(p => new PlayerViewModel
+                Players = team.Players.Select(p => new PlayerDto
                 {
                     Id = p.Id,
                     FirstName = p.FirstName,
@@ -75,18 +67,18 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     Position = PositionToString[p.Position],
                     UserId = p.UserId,
                 })
-                .OrderBy(pvm => pvm.FirstName)
+                .OrderBy(pDto => pDto.FirstName)
                 .ToList()
             };
 
             return teamDetails;
         }
 
-        public async Task<IEnumerable<HomePageTeamViewModel>> GetTeamsForHomePageAsync()
+        public async Task<IEnumerable<HomePageTeamDto>> GetTeamsForHomePageAsync()
         {
-            IEnumerable<HomePageTeamViewModel> teams = await _teamRepository
+            IEnumerable<HomePageTeamDto> teams = await _teamRepository
                 .GetAllTeamsNoTracking()
-                .Select(t => new HomePageTeamViewModel
+                .Select(t => new HomePageTeamDto
                 {
                     Id = t.Id,
                     Name = t.Name,

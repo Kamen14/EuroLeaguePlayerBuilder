@@ -1,11 +1,9 @@
-using EuroLeaguePlayerBuilder.Data;
-using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
+using EuroLeaguePlayerBuilder.Services.Models.Teams;
 using EuroLeaguePlayerBuilder.ViewModels;
 using EuroLeaguePlayerBuilder.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace EuroLeaguePlayerBuilder.Controllers
@@ -24,10 +22,19 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<HomePageTeamViewModel> teams = await _teamService
+            IEnumerable<HomePageTeamDto> teams = await _teamService
                 .GetTeamsForHomePageAsync();
 
-            return View(teams);
+            IEnumerable<HomePageTeamViewModel> homePageTeams = teams
+                .Select(t => new HomePageTeamViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    LogoPath = t.LogoPath
+                })
+                .ToList();
+
+            return View(homePageTeams);
         }
 
         public IActionResult Privacy()

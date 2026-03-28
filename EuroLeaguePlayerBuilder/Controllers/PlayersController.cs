@@ -1,12 +1,10 @@
 ﻿using EuroLeaguePlayerBuilder.GCommon.Enums;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
+using EuroLeaguePlayerBuilder.Services.Models.Players;
 using EuroLeaguePlayerBuilder.ViewModels.Players;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -24,10 +22,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<PlayerViewModel> allPlayers = await _playerService
+            IEnumerable<PlayerDto> allPlayers = await _playerService
                 .GetAllPlayersOrderedByNameAsync();
 
-            return View(allPlayers);
+            IEnumerable<PlayerViewModel> playerViewModels
+                = MapPlayerDtoToPlayerViewModel(allPlayers);
+
+            return View(playerViewModels);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -37,12 +38,24 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return BadRequest();
             }
 
-            PlayerDetailsViewModel? viewModel = await _playerService.GetPlayerDetailsByIdAsync(id);
+            PlayerDetailsDto? detailsDto = await _playerService.GetPlayerDetailsByIdAsync(id);
 
-            if (viewModel == null)
+            if (detailsDto == null)
             {
                 return NotFound();
             }
+
+            PlayerDetailsViewModel viewModel = new PlayerDetailsViewModel
+            {
+                FirstName = detailsDto.FirstName,
+                LastName = detailsDto.LastName,
+                Position = detailsDto.Position,
+                PointsPerGame = detailsDto.PointsPerGame,
+                ReboundsPerGame = detailsDto.ReboundsPerGame,
+                AssistsPerGame = detailsDto.AssistsPerGame,
+                TeamId = detailsDto.TeamId,
+                TeamName = detailsDto.TeamName
+            };
 
             return View(viewModel);
         }
@@ -51,8 +64,14 @@ namespace EuroLeaguePlayerBuilder.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            PlayerInputModel inputModel = await _playerService
+            PlayerInputDto inputDto = await _playerService
                 .GetPlayerInputModelWithLoadedTeamsAsync();
+
+            PlayerInputModel inputModel = new PlayerInputModel
+            {
+                Teams = inputDto.Teams.Select(MapCreatePlayerTeamDtoToViewModel)
+                .ToList()
+            };
 
             return View(inputModel);
         }
@@ -61,7 +80,9 @@ namespace EuroLeaguePlayerBuilder.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(PlayerInputModel inputModel)
         {
-            inputModel.Teams = await _playerService.LoadTeamsDropdownAsync();
+            inputModel.Teams = (await _playerService.LoadTeamsDropdownAsync())
+                .Select(MapCreatePlayerTeamDtoToViewModel)
+                .ToList();
 
             if (!ModelState.IsValid)
             {
@@ -89,7 +110,18 @@ namespace EuroLeaguePlayerBuilder.Controllers
             {
                 string? userId = GetUserId();
 
-                await _playerService.CreatePlayerAsync(inputModel, userId!);
+                PlayerInputDto inputDto = new PlayerInputDto
+                {
+                    FirstName = inputModel.FirstName,
+                    LastName = inputModel.LastName,
+                    Position = inputModel.Position,
+                    PointsPerGame = inputModel.PointsPerGame,
+                    ReboundsPerGame = inputModel.ReboundsPerGame,
+                    AssistsPerGame = inputModel.AssistsPerGame,
+                    TeamId = inputModel.TeamId
+                };
+
+                await _playerService.CreatePlayerAsync(inputDto, userId!);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -109,10 +141,10 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return BadRequest();
             }
 
-            PlayerInputModel? inputModel = await _playerService
+            PlayerInputDto? inputDto = await _playerService
                 .GetPlayerInputModelWithLoadedTeamsAndPlayerDataAsync(id);
 
-            if (inputModel == null)
+            if (inputDto == null)
             {
                 return NotFound();
             }
@@ -122,6 +154,20 @@ namespace EuroLeaguePlayerBuilder.Controllers
             {
                 return Forbid();
             }
+
+            PlayerInputModel inputModel = new PlayerInputModel
+            {
+                FirstName = inputDto.FirstName,
+                LastName = inputDto.LastName,
+                Position = inputDto.Position,
+                PointsPerGame = inputDto.PointsPerGame,
+                ReboundsPerGame = inputDto.ReboundsPerGame,
+                AssistsPerGame = inputDto.AssistsPerGame,
+                TeamId = inputDto.TeamId,
+                Teams = inputDto.Teams
+                .Select(MapCreatePlayerTeamDtoToViewModel)
+                .ToList()
+            };
 
             return View(inputModel);
         }
@@ -148,7 +194,9 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return Forbid();
             }
 
-            inputModel.Teams = await _playerService.LoadTeamsDropdownAsync();
+            inputModel.Teams = (await _playerService.LoadTeamsDropdownAsync())
+                .Select(MapCreatePlayerTeamDtoToViewModel)
+                .ToList();
 
             if (!ModelState.IsValid)
             {
@@ -174,7 +222,18 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-                await _playerService.EditPlayerAsync(id, inputModel);
+                PlayerInputDto inputDto = new PlayerInputDto
+                {
+                    FirstName = inputModel.FirstName,
+                    LastName = inputModel.LastName,
+                    Position = inputModel.Position,
+                    PointsPerGame = inputModel.PointsPerGame,
+                    ReboundsPerGame = inputModel.ReboundsPerGame,
+                    AssistsPerGame = inputModel.AssistsPerGame,
+                    TeamId = inputModel.TeamId,
+                };
+
+                await _playerService.EditPlayerAsync(id, inputDto);
 
                 return RedirectToAction(nameof(Details), new { id });
             }
@@ -194,10 +253,10 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return BadRequest();
             }
 
-            DeletePlayerViewModel deleteViewModel = await _playerService
+            DeletePlayerDto deleteDto = await _playerService
                 .GetPlayerForDeleteByIdAsync(id);
 
-            if (deleteViewModel == null)
+            if (deleteDto == null)
             {
                 return NotFound();
             }
@@ -207,6 +266,12 @@ namespace EuroLeaguePlayerBuilder.Controllers
             {
                 return Forbid();
             }
+
+            DeletePlayerViewModel deleteViewModel = new DeletePlayerViewModel
+            {
+                FirstName = deleteDto.FirstName,
+                LastName = deleteDto.LastName
+            };
 
             return View(deleteViewModel);
         }
@@ -255,24 +320,54 @@ namespace EuroLeaguePlayerBuilder.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(string? name)
         {
-            IEnumerable<PlayerViewModel> filteredPlayers = await _playerService
+            IEnumerable<PlayerDto> filteredPlayers = await _playerService
                 .SearchPlayerByFirstAndLastNameAsync(name);
 
-            return View(nameof(Index), filteredPlayers);
+            IEnumerable<PlayerViewModel> playerViewModels
+                = MapPlayerDtoToPlayerViewModel(filteredPlayers);
+
+            return View(nameof(Index), playerViewModels);
         }
+
 
         public async Task<IActionResult> MyPlayers()
         {
             string? userId = GetUserId();
-            IEnumerable<PlayerViewModel> userPlayers = await _playerService
+            IEnumerable<PlayerDto> userPlayers = await _playerService
                 .GetUsersPlayers(userId!);
 
-            return View(userPlayers);
+            IEnumerable<PlayerViewModel> playerViewModels
+                = MapPlayerDtoToPlayerViewModel(userPlayers);
+
+            return View(playerViewModels);
         }
 
         private string? GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
+
+        private static IEnumerable<PlayerViewModel> MapPlayerDtoToPlayerViewModel(IEnumerable<PlayerDto> playerDtos)
+        {
+            return playerDtos
+                .Select(dto => new PlayerViewModel
+                {
+                    Id = dto.Id,
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Position = dto.Position,
+                    UserId = dto.UserId
+                });
+        }
+
+        private CreatePlayerTeamViewModel MapCreatePlayerTeamDtoToViewModel(CreatePlayerTeamDto dto)
+        {
+            return new CreatePlayerTeamViewModel
+            {
+                Id = dto.Id,
+                Name = dto.Name
+            };
+        }
     }
 }
+       

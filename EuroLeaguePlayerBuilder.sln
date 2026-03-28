@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{32
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuroLeaguePlayerBuilder.Services.Core", "EuroLeaguePlayerBuilder.Services.Core\EuroLeaguePlayerBuilder.Services.Core.csproj", "{B8237079-FB14-430F-B02C-84593083672F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EuroLeaguePlayerBuilder.Services.Models", "EuroLeaguePlayerBuilder.Services.Models\EuroLeaguePlayerBuilder.Services.Models.csproj", "{E573D2CC-02E8-4779-8C99-AA9618FBB682}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{B8237079-FB14-430F-B02C-84593083672F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8237079-FB14-430F-B02C-84593083672F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8237079-FB14-430F-B02C-84593083672F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E573D2CC-02E8-4779-8C99-AA9618FBB682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E573D2CC-02E8-4779-8C99-AA9618FBB682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E573D2CC-02E8-4779-8C99-AA9618FBB682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E573D2CC-02E8-4779-8C99-AA9618FBB682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{0532FB2F-9887-40DE-AD92-DFB8F71E5E7B} = {7B8F5043-29F5-4B31-9BCD-0FB8822C4A31}
 		{CB10704F-B079-4C53-A2EF-81190A692879} = {7B8F5043-29F5-4B31-9BCD-0FB8822C4A31}
 		{B8237079-FB14-430F-B02C-84593083672F} = {324D7A93-7375-469B-B6AA-FCED1B15B77B}
+		{E573D2CC-02E8-4779-8C99-AA9618FBB682} = {324D7A93-7375-469B-B6AA-FCED1B15B77B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {075EE784-53E5-46A3-9ECC-7CBF30AAB6D4}

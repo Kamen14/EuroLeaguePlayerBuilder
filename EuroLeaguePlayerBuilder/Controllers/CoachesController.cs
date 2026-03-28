@@ -1,10 +1,8 @@
-﻿using EuroLeaguePlayerBuilder.Data;
-using EuroLeaguePlayerBuilder.Services.Core;
-using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
+﻿using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
+using EuroLeaguePlayerBuilder.Services.Models.Coaches;
 using EuroLeaguePlayerBuilder.ViewModels.Coaches;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -20,10 +18,19 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<AllCoachesViewModel> coaches = await _coachService
+            IEnumerable<AllCoachesDto> coaches = await _coachService
                 .GetAllCoachesWithTeamsAsync();
 
-            return View(coaches);
+            IEnumerable<AllCoachesViewModel> coachesViewModel = coaches.Select(c => new AllCoachesViewModel
+            {
+                FirstName = c.FirstName,
+                LastName = c.LastName,
+                TitlesWon = c.TitlesWon,
+                TeamId = c.TeamId,
+                TeamLogoPath = c.TeamLogoPath
+            });
+
+            return View(coachesViewModel);
         }
     }
 }

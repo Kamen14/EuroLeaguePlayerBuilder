@@ -7,10 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EuroLeaguePlayerBuilder.Data\EuroLeaguePlayerBuilder.Data.csproj" />
     <ProjectReference Include="..\EuroLeaguePlayerBuilder.GCommon\EuroLeaguePlayerBuilder.GCommon.csproj" />
-    <ProjectReference Include="..\EuroLeaguePlayerBuilder.Services.Models\EuroLeaguePlayerBuilder.Services.Models.csproj" />
-    <ProjectReference Include="..\EuroLeaguePlayerBuilder.ViewModels\EuroLeaguePlayerBuilder.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

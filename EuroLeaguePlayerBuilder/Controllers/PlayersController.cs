@@ -334,7 +334,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         {
             string? userId = GetUserId();
             IEnumerable<PlayerDto> userPlayers = await _playerService
-                .GetUsersPlayers(userId!);
+                .GetUserPlayers(userId!);
 
             IEnumerable<PlayerViewModel> playerViewModels
                 = MapPlayerDtoToPlayerViewModel(userPlayers);

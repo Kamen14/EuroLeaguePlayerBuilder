@@ -100,12 +100,12 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 UserId = userId
             };
 
-                bool successfullyAdded = await _playerRepository.AddPlayerAsync(player);
+            bool successfullyAdded = await _playerRepository.AddPlayerAsync(player);
 
-                if(!successfullyAdded)
-                {
-                    throw new DbUpdateException("An error occurred while adding the player to the database.");
-                }
+            if(!successfullyAdded)
+            {
+                throw new DbUpdateException("An error occurred while adding the player to the database.");
+            }
         }
 
         public async Task<PlayerInputDto> GetPlayerInputModelWithLoadedTeamsAndPlayerDataAsync(int id)
@@ -238,7 +238,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             return playerUserId != null && playerUserId == userId;
         }
 
-        public async Task<IEnumerable<PlayerDto>> GetUsersPlayers(string userId)
+        public async Task<IEnumerable<PlayerDto>> GetUserPlayers(string userId)
         {
             return await _playerRepository
                 .GetAllPlayersNoTracking()

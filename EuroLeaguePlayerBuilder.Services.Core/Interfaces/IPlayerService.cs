@@ -28,6 +28,6 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 
         Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId);
 
-        Task<IEnumerable<PlayerDto>> GetUsersPlayers(string userId);
+        Task<IEnumerable<PlayerDto>> GetUserPlayers(string userId);
     }
 }

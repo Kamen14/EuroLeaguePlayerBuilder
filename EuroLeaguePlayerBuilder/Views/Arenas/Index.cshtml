@@ -1,0 +1,77 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Arenas
+@using System.Security.Claims
+@model IEnumerable<ArenaViewModel>
+@{
+    ViewData["Title"] = "Arenas";
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+<div class="container py-5">
+    <h1 class="display-4 mb-5 text-orange text-center">All EuroLeague Arenas</h1>
+    <div class="d-flex justify-content-between mb-4">
+        <a asp-controller="Arenas"
+           asp-action="MyArenas"
+           class="btn btn-secondary">
+            My Arenas
+        </a>
+        <a asp-controller="Arenas"
+           asp-action="Create"
+           class="btn btn-warning">
+            + Add New Arena
+        </a>
+    </div>
+    <div class="row justify-content-center g-4">
+        @foreach (var arena in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card border-0 bg-dark shadow-lg h-100">
+                    @if (arena.ImagePath != null)
+                    {
+                        <img src="@arena.ImagePath"
+                             class="card-img-top img-fluid p-3 arena-img"
+                             alt="@arena.Name">
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center justify-content-center arena-img">
+                            <span class="text-secondary">No Image Available</span>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <h3 class="card-title text-white">@arena.Name</h3>
+                        <p class="card-text text-white mb-1"><strong>City:</strong> @arena.City</p>
+                        <p class="card-text text-white mb-1"><strong>Country:</strong> @arena.Country</p>
+                        <p class="card-text text-white"><strong>Capacity:</strong> @arena.Capacity.ToString("N0")</p>
+                        @if (arena.UserId != null && arena.UserId == currentUserId)
+                        {
+                            <div class="d-flex gap-2 mt-3">
+                                <a asp-controller="Arenas"
+                                   asp-action="Edit"
+                                   asp-route-id="@arena.Id"
+                                   class="btn btn-warning btn-sm">Edit</a>
+                                <a asp-controller="Arenas"
+                                   asp-action="Delete"
+                                   asp-route-id="@arena.Id"
+                                   class="btn btn-danger btn-sm">Delete</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<style>
+    .arena-img {
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+    }
+</style>
+

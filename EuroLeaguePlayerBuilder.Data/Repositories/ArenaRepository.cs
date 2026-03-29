@@ -26,12 +26,36 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
                 .AsNoTracking();
         }
 
+        public IQueryable<Arena> GetAllArenas()
+        {
+            return _dbContext.Arenas;
+        }
+
         public async Task<bool> AddArenaAsync(Arena arena)
         {
             await _dbContext.Arenas.AddAsync(arena);
             int resultCount = await _dbContext.SaveChangesAsync();
 
             return resultCount == 1;
+        }
+
+        public async Task<Arena?> GetArenaByIdNoTrackingAsync(int id)
+        {
+            return await _dbContext.Arenas
+                .AsNoTracking()
+                .SingleOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task UpdateArenaAsync(Arena selectedArena)
+        {
+            _dbContext.Arenas.Update(selectedArena);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteArenaAsync(Arena selectedArena)
+        {
+            _dbContext.Arenas.Remove(selectedArena);
+            await _dbContext.SaveChangesAsync();
         }
 
         // Dispose pattern implementation

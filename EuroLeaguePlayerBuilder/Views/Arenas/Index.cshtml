@@ -1,5 +1,6 @@
 ﻿@using EuroLeaguePlayerBuilder.ViewModels.Arenas
 @using System.Security.Claims
+@using static EuroLeaguePlayerBuilder.GCommon.ImageConstants.ArenaImages
 @model IEnumerable<ArenaViewModel>
 @{
     ViewData["Title"] = "Arenas";
@@ -32,9 +33,9 @@
                     }
                     else
                     {
-                        <div class="d-flex align-items-center justify-content-center arena-img">
-                            <span class="text-secondary">No Image Available</span>
-                        </div>
+                        <img src="@DefaultArenaImage"
+                             class="card-img-top img-fluid p-3 arena-img"
+                             alt="DefaultArena">
                     }
                     <div class="card-body">
                         <h3 class="card-title text-white">@arena.Name</h3>

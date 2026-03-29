@@ -11,5 +11,8 @@ namespace EuroLeaguePlayerBuilder.Services.Models.Arenas
         public int Capacity { get; set; }
 
         public IFormFile? Image { get; set; }
+
+        // for editing existing arena
+        public string? ImagePath { get; set; }
     }
 }

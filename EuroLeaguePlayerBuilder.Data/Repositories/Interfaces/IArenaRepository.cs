@@ -11,6 +11,14 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories.Interfaces
     {
         IQueryable<Arena> GetAllArenasNoTracking();
 
+        IQueryable<Arena> GetAllArenas();
+
         Task<bool> AddArenaAsync(Arena arena);
+
+        Task<Arena?> GetArenaByIdNoTrackingAsync(int id);
+
+        Task UpdateArenaAsync(Arena selectedArena);
+
+        Task DeleteArenaAsync(Arena selectedArena);
     }
 }

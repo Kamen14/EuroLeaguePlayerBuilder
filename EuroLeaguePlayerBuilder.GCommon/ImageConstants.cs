@@ -25,6 +25,11 @@ namespace EuroLeaguePlayerBuilder.GCommon
             public const string WiZinkCenterImage = "/images/arenas/wizink_center.jpg";
             public const string PalauBlaugranaImage = "/images/arenas/palau_blaugrana.jpg";
             public const string BelgradeArenaImage = "/images/arenas/belgrade_arena.jpg";
+            public const string DefaultArenaImage = "/images/arenas/default_arena.jpg";
+
+            public const long MaxArenaImageSize = 3 * 1024 * 1024; // 3MB
+
+            public const string CurrentImagePathKey = "CurrentImagePath";
         }
 
 

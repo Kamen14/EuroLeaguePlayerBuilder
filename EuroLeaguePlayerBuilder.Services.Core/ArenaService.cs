@@ -1,9 +1,7 @@
 ﻿using EuroLeaguePlayerBuilder.Data.Models;
-using EuroLeaguePlayerBuilder.Data.Repositories;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Arenas;
-using EuroLeaguePlayerBuilder.Services.Models.Players;
 using Microsoft.EntityFrameworkCore;
 using static EuroLeaguePlayerBuilder.GCommon.ImageConstants.ArenaImages;
 using static EuroLeaguePlayerBuilder.GCommon.ImageValidator;
@@ -174,6 +172,17 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
                 if (inputDto.Image.Length > MaxFileSize)
                     throw new InvalidOperationException("File size must not exceed 3MB.");
+
+                //delete old image if exists
+                
+                if (!string.IsNullOrEmpty(selectedArena.ImagePath))
+                {
+                    string oldFilePath = Path.Combine(wwwRootPath, selectedArena.ImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                    if (File.Exists(oldFilePath))
+                    {
+                        File.Delete(oldFilePath);
+                    }
+                }
 
                 string uploadsFolder = Path.Combine(wwwRootPath, "images", "arenas");
                 Directory.CreateDirectory(uploadsFolder);

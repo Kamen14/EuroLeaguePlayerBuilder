@@ -23,11 +23,13 @@ namespace EuroLeaguePlayerBuilder
             builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
             builder.Services.AddScoped<ITeamRepository, TeamRepository>();
             builder.Services.AddScoped<IArenaRepository, ArenaRepository>();
+            builder.Services.AddScoped<IGameRepository, GameRepository>();
 
             builder.Services.AddScoped<IPlayerService, PlayerService>();
             builder.Services.AddScoped<ICoachService, CoachService>();
             builder.Services.AddScoped<ITeamService, TeamService>();
             builder.Services.AddScoped<IArenaService, ArenaService>();
+            builder.Services.AddScoped<IGameService, GameService>();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {

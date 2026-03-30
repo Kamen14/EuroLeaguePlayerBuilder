@@ -1,0 +1,70 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Games
+@using System.Security.Claims
+@model IEnumerable<GameViewModel>
+@{
+    ViewData["Title"] = "My Games";
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+<div class="container py-5">
+    <h1 class="display-4 mb-5 text-orange text-center">My Games</h1>
+    <div class="d-flex justify-content-end mb-4">
+        <a asp-controller="Games"
+           asp-action="Create"
+           class="btn btn-warning fw-bold px-4">
+            + Create Game
+        </a>
+    </div>
+    @if (Model == null || !Model.Any())
+    {
+        <div class="d-flex justify-content-center align-items-center" style="min-height: 300px;">
+            <h3 class="text-secondary">You have no Games.</h3>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center g-4">
+            @foreach (var game in Model)
+            {
+                <div class="col-12 col-md-10 col-lg-8">
+                    <div class="card border-0 bg-dark shadow-lg p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            {{-- Team One --}}
+                            <div class="d-flex flex-column align-items-center" style="width: 30%">
+                                <img src="@game.TeamOneLogoPath"
+                                     alt="@game.TeamOneName"
+                                     style="height: 70px; object-fit: contain;">
+                                <span class="text-white fw-bold mt-2 text-center">@game.TeamOneName</span>
+                            </div>
+                            {{-- Score --}}
+                            <div class="d-flex flex-column align-items-center" style="width: 40%">
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="text-orange fw-bold" style="font-size: 2.5rem;">@game.TeamOneScore</span>
+                                    <span class="text-white fw-bold" style="font-size: 2rem;">-</span>
+                                    <span class="text-orange fw-bold" style="font-size: 2.5rem;">@game.TeamTwoScore</span>
+                                </div>
+                                <span class="text-secondary mt-1" style="font-size: 0.85rem;">@game.ArenaName</span>
+                                <div class="d-flex gap-2 mt-3">
+                                    <a asp-controller="Games"
+                                       asp-action="Edit"
+                                       asp-route-id="@game.Id"
+                                       class="btn btn-warning btn-sm">Edit</a>
+                                    <a asp-controller="Games"
+                                       asp-action="Delete"
+                                       asp-route-id="@game.Id"
+                                       class="btn btn-danger btn-sm">Delete</a>
+                                </div>
+                            </div>
+                            {{-- Team Two --}}
+                            <div class="d-flex flex-column align-items-center" style="width: 30%">
+                                <img src="@game.TeamTwoLogoPath"
+                                     alt="@game.TeamTwoName"
+                                     style="height: 70px; object-fit: contain;">
+                                <span class="text-white fw-bold mt-2 text-center">@game.TeamTwoName</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

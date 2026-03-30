@@ -1,0 +1,112 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Games
+@model GameInputModel
+@{
+    ViewData["Title"] = "Create Game";
+}
+<div class="container py-5">
+    <h1 class="display-4 mb-5 text-orange text-center">Create Game</h1>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card border-0 bg-dark shadow-lg p-4">
+                <form asp-controller="Games" asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    {{-- Team One Selection --}}
+                    <h4 class="text-white mb-3">Select Team One</h4>
+                    <div class="row g-3 mb-4" id="teamOneGrid">
+                        @foreach (var team in Model.Teams)
+                        {
+                            <div class="col-4 col-md-2">
+                                <div class="team-card text-center p-2 rounded cursor-pointer"
+                                     data-team-id="@team.Id"
+                                     data-target="TeamOneId"
+                                     onclick="selectTeam(this, 'TeamOneId', 'teamOneGrid')">
+                                    <img src="@team.LogoPath"
+                                         alt="@team.Name"
+                                         style="height: 60px; object-fit: contain;">
+                                    <p class="text-white mt-1 mb-0" style="font-size: 0.75rem;">@team.Name</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <input type="hidden" id="TeamOneId" name="TeamOneId" asp-for="TeamOneId" />
+                    <span asp-validation-for="TeamOneId" class="text-danger"></span>
+
+                    {{-- Team Two Selection --}}
+                    <h4 class="text-white mb-3 mt-4">Select Team Two</h4>
+                    <div class="row g-3 mb-4" id="teamTwoGrid">
+                        @foreach (var team in Model.Teams)
+                        {
+                            <div class="col-4 col-md-2">
+                                <div class="team-card text-center p-2 rounded cursor-pointer"
+                                     data-team-id="@team.Id"
+                                     data-target="TeamTwoId"
+                                     onclick="selectTeam(this, 'TeamTwoId', 'teamTwoGrid')">
+                                    <img src="@team.LogoPath"
+                                         alt="@team.Name"
+                                         style="height: 60px; object-fit: contain;">
+                                    <p class="text-white mt-1 mb-0" style="font-size: 0.75rem;">@team.Name</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <input type="hidden" id="TeamTwoId" name="TeamTwoId" asp-for="TeamTwoId" />
+                    <span asp-validation-for="TeamTwoId" class="text-danger"></span>
+
+                    {{-- Arena Selection --}}
+                    <div class="mb-4 mt-4">
+                        <h4 class="text-white mb-3">Select Arena</h4>
+                        <select asp-for="ArenaId"
+                                class="form-select bg-secondary text-white border-0"
+                                asp-items="@(new SelectList(Model.Arenas, "Id", "Name"))">
+                            <option value="">-- Select Arena --</option>
+                        </select>
+                        <span asp-validation-for="ArenaId" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-warning fw-bold">Create Game</button>
+                        <a asp-controller="Games" asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .team-card {
+        background-color: #2d2d2d;
+        border: 2px solid transparent;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+        cursor: pointer;
+    }
+
+        .team-card:hover {
+            border-color: darkorange;
+            transform: scale(1.05);
+        }
+
+        .team-card.selected {
+            border-color: darkorange;
+            background-color: #3d2d00;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        function selectTeam(card, targetId, gridId) {
+            // remove selected from all cards in this grid
+            document.querySelectorAll(`#${gridId} .team-card`).forEach(c => {
+                c.classList.remove('selected');
+            });
+            // mark this card as selected
+            card.classList.add('selected');
+            // set the hidden input value
+            document.getElementById(targetId).value = card.dataset.teamId;
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

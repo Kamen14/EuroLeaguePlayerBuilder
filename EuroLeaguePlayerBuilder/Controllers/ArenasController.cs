@@ -161,21 +161,25 @@ namespace EuroLeaguePlayerBuilder.Controllers
             {
                 return BadRequest();
             }
+
             DeleteArenaDto? deleteDto = await _arenaService.GetArenaForDeleteByIdAsync(id);
             if (deleteDto == null)
             {
                 return NotFound();
             }
+
             string? userId = GetUserId();
             if (!await _arenaService.IsArenaOwnedByUserAsync(id, userId!))
             {
                 return Forbid();
             }
+
             DeleteArenaViewModel deleteViewModel = new DeleteArenaViewModel
             {
                 Name = deleteDto.Name,
                 City = deleteDto.City
             };
+
             return View(deleteViewModel);
         }
 

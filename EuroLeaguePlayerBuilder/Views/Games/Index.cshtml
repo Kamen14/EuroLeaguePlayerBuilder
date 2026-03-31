@@ -28,33 +28,33 @@
                 <div class="col-12 col-md-10 col-lg-8">
                     <div class="card border-0 bg-dark shadow-lg p-3">
                         <div class="d-flex align-items-center justify-content-between">
-                            {{-- Team One --}}
+                            @* Team One *@
                             <div class="d-flex flex-column align-items-center" style="width: 30%">
                                 <img src="@game.TeamOneLogoPath"
                                      alt="@game.TeamOneName"
                                      style="height: 70px; object-fit: contain;">
                                 <span class="text-white fw-bold mt-2 text-center">@game.TeamOneName</span>
                             </div>
-                            {{-- Score --}}
+                            @* Score *@
                             <div class="d-flex flex-column align-items-center" style="width: 40%">
                                 <div class="d-flex align-items-center gap-3">
-                                    <span class="text-orange fw-bold" style="font-size: 2.5rem;">@game.TeamOneScore</span>
+                                    <span class="text-orange fw-bold score-one" id="score-one-@game.Id" style="font-size: 2.5rem;">@game.TeamOneScore</span>
                                     <span class="text-white fw-bold" style="font-size: 2rem;">-</span>
-                                    <span class="text-orange fw-bold" style="font-size: 2.5rem;">@game.TeamTwoScore</span>
+                                    <span class="text-orange fw-bold score-two" id="score-two-@game.Id" style="font-size: 2.5rem;">@game.TeamTwoScore</span>
                                 </div>
                                 <span class="text-secondary mt-1" style="font-size: 0.85rem;">@game.ArenaName</span>
                                 <div class="d-flex gap-2 mt-3">
-                                    <a asp-controller="Games"
-                                       asp-action="Edit"
-                                       asp-route-id="@game.Id"
-                                       class="btn btn-warning btn-sm">Edit</a>
+                                    <button class="btn btn-success btn-sm"
+                                            onclick="simulateGame(@game.Id)">
+                                         Simulate
+                                    </button>
                                     <a asp-controller="Games"
                                        asp-action="Delete"
                                        asp-route-id="@game.Id"
                                        class="btn btn-danger btn-sm">Delete</a>
                                 </div>
                             </div>
-                            {{-- Team Two --}}
+                            @* Team Two *@
                             <div class="d-flex flex-column align-items-center" style="width: 30%">
                                 <img src="@game.TeamTwoLogoPath"
                                      alt="@game.TeamTwoName"
@@ -68,3 +68,29 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        async function simulateGame(gameId) {
+            try {
+                const response = await fetch(`/Games/Simulate/${gameId}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    }
+                });
+
+                if (!response.ok) {
+                    alert('Failed to simulate game. Please try again.');
+                    return;
+                }
+
+                const data = await response.json();
+                document.getElementById(`score-one-${gameId}`).textContent = data.teamOneScore;
+                document.getElementById(`score-two-${gameId}`).textContent = data.teamTwoScore;
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
+}

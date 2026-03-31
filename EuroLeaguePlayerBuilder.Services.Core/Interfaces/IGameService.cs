@@ -13,5 +13,19 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
         Task<IEnumerable<GameDto>> GetAllGamesOrderedByTeamsNameAsync();
 
         Task<GameInputDto> GetGameInputDataAsync();
+
+        Task CreateGameAsync(GameInputDto inputDto, string userId);
+
+        Task<bool> GameExistsAsync(int id);
+
+        Task<bool> IsGameOwnedByUserAsync(int gameId, string userId);
+
+        Task UpdateGameScoreAsync(int gameId, int teamOneScore, int teamTwoScore);
+
+        Task<IEnumerable<GameDto>> GetUserGamesAsync(string userId);
+
+        Task<GameDeleteDto> GetGameForDeleteByIdAsync(int id);
+
+        Task DeleteGameAsync(int id);
     }
 }

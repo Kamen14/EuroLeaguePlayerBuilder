@@ -140,7 +140,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
         {
             bool selectedArenaExists = await _arenaRepository
                 .GetAllArenasNoTracking()
-                .AnyAsync(p => p.Id == id);
+                .AnyAsync(a => a.Id == id);
 
             return selectedArenaExists;
         }
@@ -232,7 +232,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 throw new ArgumentException("Player with the provided ID does not exist.");
             }
 
-            await _arenaRepository.DeleteArenaAsync(selectedArena);
+            await _arenaRepository.DeleteArenaFromDbAsync(selectedArena);
         }
     }
 }

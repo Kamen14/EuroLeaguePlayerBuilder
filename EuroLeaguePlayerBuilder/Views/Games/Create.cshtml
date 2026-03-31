@@ -11,7 +11,7 @@
                 <form asp-controller="Games" asp-action="Create" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                    {{-- Team One Selection --}}
+                    @* Team One Selection *@
                     <h4 class="text-white mb-3">Select Team One</h4>
                     <div class="row g-3 mb-4" id="teamOneGrid">
                         @foreach (var team in Model.Teams)
@@ -32,7 +32,7 @@
                     <input type="hidden" id="TeamOneId" name="TeamOneId" asp-for="TeamOneId" />
                     <span asp-validation-for="TeamOneId" class="text-danger"></span>
 
-                    {{-- Team Two Selection --}}
+                    @* Team Two Selection *@
                     <h4 class="text-white mb-3 mt-4">Select Team Two</h4>
                     <div class="row g-3 mb-4" id="teamTwoGrid">
                         @foreach (var team in Model.Teams)
@@ -53,7 +53,7 @@
                     <input type="hidden" id="TeamTwoId" name="TeamTwoId" asp-for="TeamTwoId" />
                     <span asp-validation-for="TeamTwoId" class="text-danger"></span>
 
-                    {{-- Arena Selection --}}
+                    @* Arena *@
                     <div class="mb-4 mt-4">
                         <h4 class="text-white mb-3">Select Arena</h4>
                         <select asp-for="ArenaId"

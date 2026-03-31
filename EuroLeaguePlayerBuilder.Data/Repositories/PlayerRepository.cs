@@ -53,7 +53,7 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeletePlayerAsync(Player selectedPlayer)
+        public async Task DeletePlayerFromDbAsync(Player selectedPlayer)
         {
             _dbContext.Players.Remove(selectedPlayer);
             await _dbContext.SaveChangesAsync();

@@ -195,7 +195,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 throw new ArgumentException("Player with the provided ID does not exist.");
             }
 
-            await _playerRepository.DeletePlayerAsync(selectedPlayer);
+            await _playerRepository.DeletePlayerFromDbAsync(selectedPlayer);
         }
 
         public async Task<IEnumerable<PlayerDto>> SearchPlayerByFirstAndLastNameAsync(string? name)

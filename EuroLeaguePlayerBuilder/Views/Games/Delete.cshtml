@@ -1,0 +1,18 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Games
+@model GameDeleteViewModel
+@{
+    ViewData["Title"] = "Delete Game";
+}
+<div class="container mt-5">
+    <div class="bg-dark text-white">
+        <div class="card-body">
+            <h3 class="card-title text-warning">Confirm Delete</h3>
+            <p>Are you sure you want to delete the game between <strong>@Model.TeamOneName</strong> and <strong>@Model.TeamTwoName</strong>?</p>
+            <form asp-action="Delete" asp-controller="Games" method="post">
+                <button type="submit" class="btn btn-danger me-2">Delete</button>
+                <a asp-controller="Games" asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+}

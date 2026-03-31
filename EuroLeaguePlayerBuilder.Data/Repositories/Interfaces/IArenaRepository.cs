@@ -19,6 +19,6 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories.Interfaces
 
         Task UpdateArenaAsync(Arena selectedArena);
 
-        Task DeleteArenaAsync(Arena selectedArena);
+        Task DeleteArenaFromDbAsync(Arena selectedArena);
     }
 }

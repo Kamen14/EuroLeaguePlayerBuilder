@@ -1,10 +1,13 @@
-﻿using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
+﻿using EuroLeaguePlayerBuilder.Services.Core;
+using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Arenas;
 using EuroLeaguePlayerBuilder.Services.Models.Games;
 using EuroLeaguePlayerBuilder.ViewModels.Arenas;
 using EuroLeaguePlayerBuilder.ViewModels.Games;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -20,8 +23,10 @@ namespace EuroLeaguePlayerBuilder.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            string? userId = GetUserId();
+
             IEnumerable<GameDto> games
-                = await _gameService.GetAllGamesOrderedByTeamsNameAsync();
+                = await _gameService.GetUserGamesAsync(userId!);
             IEnumerable<GameViewModel> gameViewModels = MapGameDtoToGameViewModel(games);
 
             return View(gameViewModels);
@@ -33,20 +38,11 @@ namespace EuroLeaguePlayerBuilder.Controllers
             GameInputDto gameInputData = await _gameService.GetGameInputDataAsync();
 
             IEnumerable<GameArenaViewModel> arenas = gameInputData.Arenas
-                .Select(a => new GameArenaViewModel
-                {
-                    Id = a.Id,
-                    Name = a.Name
-                })
+                .Select(MapGameArenaDtoToViewModel())
                 .ToList();
 
             IEnumerable<GameTeamViewModel> teams = gameInputData.Teams
-                .Select(t => new GameTeamViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name,
-                    LogoPath = t.LogoPath
-                })
+                .Select(MapGameTeamDtoToViewModel())
                 .ToList();
 
             GameInputModel inputModel = new GameInputModel
@@ -56,6 +52,143 @@ namespace EuroLeaguePlayerBuilder.Controllers
             };
 
             return View(inputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(GameInputModel inputModel)
+        {
+            GameInputDto inputData = await _gameService.GetGameInputDataAsync();
+
+            IEnumerable<GameArenaViewModel> arenas = inputData.Arenas
+                .Select(MapGameArenaDtoToViewModel())
+                .ToList();
+
+            IEnumerable<GameTeamViewModel> teams = inputData.Teams
+                .Select(MapGameTeamDtoToViewModel())
+                .ToList();
+
+            inputModel.Arenas = arenas;
+
+            inputModel.Teams = teams;
+
+            if (!ModelState.IsValid)
+            {
+                return View(inputModel);
+            }
+
+            if (inputModel.TeamOneId == inputModel.TeamTwoId)
+            {
+                ModelState.AddModelError(string.Empty, "Team One and Team Two cannot be the same team.");
+                return View(inputModel);
+            }
+
+            try
+            {
+                string? userId = GetUserId();
+
+                GameInputDto inputDto = new GameInputDto
+                {
+                    TeamOneId = inputModel.TeamOneId,
+                    TeamTwoId = inputModel.TeamTwoId,
+                    ArenaId = inputModel.ArenaId
+                };
+                await _gameService.CreateGameAsync(inputDto, userId!);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the game. Please try again.");
+                return View(inputModel);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Simulate(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            if (!await _gameService.GameExistsAsync(id))
+            {
+                return NotFound();
+            }
+
+            string? userId = GetUserId();
+            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!))
+            {
+                return Forbid();
+            }
+
+            Random random = new Random();
+            int teamOneScore = random.Next(70, 111);
+            int teamTwoScore = random.Next(70, 111);
+
+            await _gameService.UpdateGameScoreAsync(id, teamOneScore, teamTwoScore);
+
+            return Json(new { teamOneScore, teamTwoScore });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            GameDeleteDto? deleteDto = await _gameService.GetGameForDeleteByIdAsync(id);
+
+            if(deleteDto == null)
+            {
+                return NotFound();
+            }
+
+            string? userId = GetUserId();
+            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!))
+            {
+                return Forbid();
+            }
+
+            GameDeleteViewModel deleteViewModel = new GameDeleteViewModel
+            {
+                TeamOneName = deleteDto.TeamOneName,
+                TeamTwoName = deleteDto.TeamTwoName
+            };
+
+            return View(deleteViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromRoute] int id, GameDeleteViewModel? deleteViewModel)
+        {
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            if (!await _gameService.GameExistsAsync(id))
+            {
+                return NotFound();
+            }
+
+            string? userId = GetUserId();
+            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!))
+            {
+                return Forbid();
+            }
+
+            try
+            {
+                await _gameService.DeleteGameAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while deleting the game. Please try again.");
+                return View(deleteViewModel);
+            }
         }
 
         private static IEnumerable<GameViewModel> MapGameDtoToGameViewModel(IEnumerable<GameDto> games)
@@ -72,6 +205,29 @@ namespace EuroLeaguePlayerBuilder.Controllers
                     TeamTwoScore = g.TeamTwoScore,
                     ArenaName = g.ArenaName
                 });
+        }
+        private static Func<GameArenaDto, GameArenaViewModel> MapGameArenaDtoToViewModel()
+        {
+            return a => new GameArenaViewModel
+            {
+                Id = a.Id,
+                Name = a.Name
+            };
+        }
+
+        private static Func<GameTeamDto, GameTeamViewModel> MapGameTeamDtoToViewModel()
+        {
+            return t => new GameTeamViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                LogoPath = t.LogoPath
+            };
+        }
+
+        private string? GetUserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }

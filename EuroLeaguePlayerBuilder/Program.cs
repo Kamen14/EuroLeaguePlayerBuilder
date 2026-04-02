@@ -57,7 +57,7 @@ namespace EuroLeaguePlayerBuilder
 
             app.UseRouting();
 
-            app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");// app.UseStatusCodePagesWithReDirects("/Home/Error/{0}");
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -103,7 +103,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Simulate(int id)
+        public async Task<IActionResult> Simulate([FromRoute] int id)
         {
             if (id <= 0)
             {
@@ -124,6 +124,12 @@ namespace EuroLeaguePlayerBuilder.Controllers
             Random random = new Random();
             int teamOneScore = random.Next(70, 111);
             int teamTwoScore = random.Next(70, 111);
+
+            //prevents draws
+            if(teamOneScore == teamTwoScore)
+            {
+                teamOneScore += 1;
+            }
 
             await _gameService.UpdateGameScoreAsync(id, teamOneScore, teamTwoScore);
 

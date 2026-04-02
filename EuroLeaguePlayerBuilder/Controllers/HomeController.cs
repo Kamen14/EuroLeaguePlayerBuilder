@@ -3,6 +3,7 @@ using EuroLeaguePlayerBuilder.Services.Models.Teams;
 using EuroLeaguePlayerBuilder.ViewModels;
 using EuroLeaguePlayerBuilder.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -42,9 +43,20 @@ namespace EuroLeaguePlayerBuilder.Controllers
             return View();
         }
 
+        [Route("Home/Error/{statusCode}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int statusCode)
         {
+            if(statusCode == StatusCodes.Status404NotFound)
+            {
+                return View("NotFound");
+            }
+
+            if(statusCode == StatusCodes.Status400BadRequest)
+            {
+                return View("BadRequest");
+            }
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

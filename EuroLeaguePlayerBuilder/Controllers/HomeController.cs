@@ -49,12 +49,12 @@ namespace EuroLeaguePlayerBuilder.Controllers
         {
             if(statusCode == StatusCodes.Status404NotFound)
             {
-                return View("NotFound");
+                return View(nameof(NotFound));
             }
 
             if(statusCode == StatusCodes.Status400BadRequest)
             {
-                return View("BadRequest");
+                return View(nameof(BadRequest));
             }
 
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

@@ -33,7 +33,7 @@ namespace EuroLeaguePlayerBuilder
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
-                ConfigureIdentity(options);
+                ConfigureIdentity(builder.Configuration, options);
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
@@ -70,23 +70,36 @@ namespace EuroLeaguePlayerBuilder
             app.Run();
         }
 
-        private static void ConfigureIdentity(IdentityOptions identityOptions)
+        private static void ConfigureIdentity(ConfigurationManager configurationManager
+            , IdentityOptions identityOptions)
         {
-            identityOptions.SignIn.RequireConfirmedAccount = false;
-            identityOptions.SignIn.RequireConfirmedEmail = false;
-            identityOptions.SignIn.RequireConfirmedPhoneNumber = false;
+            identityOptions.SignIn.RequireConfirmedAccount = configurationManager
+                .GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
+            identityOptions.SignIn.RequireConfirmedEmail = configurationManager
+                .GetValue<bool>("Identity:SignIn:RequireConfirmedEmail");
+            identityOptions.SignIn.RequireConfirmedPhoneNumber = configurationManager
+                .GetValue<bool>("Identity:SignIn:RequireConfirmedPhoneNumber");
 
-            identityOptions.User.RequireUniqueEmail = true;
+            identityOptions.User.RequireUniqueEmail = configurationManager
+                .GetValue<bool>("Identity:User:RequireUniqueEmail"); ;
 
-            identityOptions.Lockout.MaxFailedAccessAttempts = 200;
-            identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+            identityOptions.Lockout.MaxFailedAccessAttempts = configurationManager
+                .GetValue<int>("Identity:Lockout:MaxFailedAccessAttempts");
+            identityOptions.Lockout.DefaultLockoutTimeSpan = configurationManager
+                .GetValue<TimeSpan>("Identity:Lockout:DefaultLockoutTimeSpan");
 
-            identityOptions.Password.RequireDigit = true;
-            identityOptions.Password.RequireLowercase = false;
-            identityOptions.Password.RequireNonAlphanumeric = false;
-            identityOptions.Password.RequireUppercase = false;
-            identityOptions.Password.RequiredLength = 6;
-            identityOptions.Password.RequiredUniqueChars = 0;
+            identityOptions.Password.RequireDigit = configurationManager
+                .GetValue<bool>("Identity:Password:RequireDigit");
+            identityOptions.Password.RequireLowercase = configurationManager
+                .GetValue<bool>("Identity:Password:RequireLowercase");
+            identityOptions.Password.RequireNonAlphanumeric = configurationManager
+                .GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
+            identityOptions.Password.RequireUppercase = configurationManager
+                .GetValue<bool>("Identity:Password:RequireUppercase");
+            identityOptions.Password.RequiredLength = configurationManager
+                .GetValue<int>("Identity:Password:RequiredLength");
+            identityOptions.Password.RequiredUniqueChars = configurationManager
+                .GetValue<int>("Identity:Password:RequiredUniqueChars");
         }
     }
 }

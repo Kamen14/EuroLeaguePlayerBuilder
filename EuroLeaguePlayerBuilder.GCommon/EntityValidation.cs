@@ -48,5 +48,10 @@
             public const int MinArenaCapacity = 1000;
             public const int MaxArenaCapacity = 50000;
         }
+
+        public static class ApplicationUser
+        {
+            public const int NicknameMaxLength = 50;
+        }
     }
 }

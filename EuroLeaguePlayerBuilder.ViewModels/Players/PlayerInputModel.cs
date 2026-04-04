@@ -1,19 +1,18 @@
 ﻿using EuroLeaguePlayerBuilder.GCommon.Enums;
 using System.ComponentModel.DataAnnotations;
 using static EuroLeaguePlayerBuilder.GCommon.EntityValidation.Player;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.ViewModels.Players
 {
     public class PlayerInputModel
     {
         [Required]
-        [MinLength(PlayerNameMinLength)]
-        [MaxLength(PlayerNameMaxLength)]
+        [StringLength(PlayerNameMaxLength, MinimumLength = PlayerNameMinLength, ErrorMessage = PlayerNameOutOfRange)]
         public string FirstName { get; set; } = null!;
 
         [Required]
-        [MinLength(PlayerNameMinLength)]
-        [MaxLength(PlayerNameMaxLength)]
+        [StringLength(PlayerNameMaxLength, MinimumLength = PlayerNameMinLength, ErrorMessage = PlayerNameOutOfRange)]
         public string LastName { get; set; } = null!;
 
         [Required]

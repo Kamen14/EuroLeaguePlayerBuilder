@@ -1,4 +1,5 @@
 using EuroLeaguePlayerBuilder.Data;
+using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Data.Repositories;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core;
@@ -31,10 +32,11 @@ namespace EuroLeaguePlayerBuilder
             builder.Services.AddScoped<IArenaService, ArenaService>();
             builder.Services.AddScoped<IGameService, GameService>();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 ConfigureIdentity(builder.Configuration, options);
             })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 

@@ -92,6 +92,10 @@ namespace EuroLeaguePlayerBuilder.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "Nickname (optional)")]
+            [StringLength(50, MinimumLength = 2, ErrorMessage = "Nickname must be between 2 and 50 characters long.")]
+            public string? Nickname { get; set; }
         }
 
 
@@ -108,6 +112,7 @@ namespace EuroLeaguePlayerBuilder.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.Nickname = Input.Nickname; // handles the nickname input
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

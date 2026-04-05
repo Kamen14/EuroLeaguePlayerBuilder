@@ -1,4 +1,5 @@
 using EuroLeaguePlayerBuilder.Data;
+using EuroLeaguePlayerBuilder.Data.Configuration;
 using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Data.Repositories;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
@@ -42,6 +43,12 @@ namespace EuroLeaguePlayerBuilder
 
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+               RoleConfiguration.SeedRoles(scope.ServiceProvider);
+               RoleConfiguration.SeedDefaultAdmin(scope.ServiceProvider);
+            }
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -63,6 +70,10 @@ namespace EuroLeaguePlayerBuilder
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",

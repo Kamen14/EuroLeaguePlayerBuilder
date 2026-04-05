@@ -24,4 +24,14 @@
     <ProjectReference Include="..\EuroLeaguePlayerBuilder.ViewModels\EuroLeaguePlayerBuilder.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Views\Home\" />
+    <Folder Include="Areas\Admin\Views\Arenas\" />
+    <Folder Include="Areas\Admin\Views\Games\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Areas\Admin\Views\Users\" />
+    <Folder Include="Areas\Admin\Views\Players\" />
+  </ItemGroup>
+
 </Project>

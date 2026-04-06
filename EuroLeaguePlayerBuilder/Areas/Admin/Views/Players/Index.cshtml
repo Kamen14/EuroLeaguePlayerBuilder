@@ -1,0 +1,58 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
+@model IEnumerable<AdminPlayerViewModel>
+@{
+    ViewData["Title"] = "Manage Players";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>All Players</h1>
+        <a asp-area="" asp-controller="Players" asp-action="Create"
+           class="btn" style="background-color: darkorange; color: black; font-weight: bold;">
+            + Add Player
+        </a>
+    </div>
+
+    <table class="table table-dark table-bordered table-hover">
+        <thead>
+            <tr style="color: darkorange;">
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Position</th>
+                <th>Created By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody style="color: white;">
+            @foreach (var player in Model)
+            {
+                <tr>
+                    <td>@player.FirstName</td>
+                    <td>@player.LastName</td>
+                    <td>@player.Position</td>
+                    <td>@(player.CreatedByNickname ?? player.CreatedByEmail ?? "-")</td>
+                    <td>
+                        <a asp-area="" asp-controller="Players"
+                           asp-action="Details" asp-route-id="@player.Id"
+                           class="btn btn-sm btn-warning text-dark me-1">
+                            View
+                        </a>
+                        @if (player.CreatedByEmail != null)
+                        {
+                            <a asp-area="" asp-controller="Players"
+                               asp-action="Edit" asp-route-id="@player.Id"
+                               class="btn btn-sm btn-info text-dark me-1">
+                                Edit
+                            </a>
+                            <a asp-area="" asp-controller="Players"
+                               asp-action="Delete" asp-route-id="@player.Id"
+                               class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

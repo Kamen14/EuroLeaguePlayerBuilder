@@ -1,9 +1,4 @@
 ﻿using EuroLeaguePlayerBuilder.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EuroLeaguePlayerBuilder.Data.Repositories.Interfaces
 {
@@ -20,5 +15,7 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories.Interfaces
         Task UpdateArenaAsync(Arena selectedArena);
 
         Task DeleteArenaFromDbAsync(Arena selectedArena);
+
+        IQueryable<Arena> GetAllArenasWithUserNoTracking();
     }
 }

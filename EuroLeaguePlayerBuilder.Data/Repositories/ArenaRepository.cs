@@ -1,11 +1,6 @@
 ﻿using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace EuroLeaguePlayerBuilder.Data.Repositories
@@ -58,6 +53,13 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public IQueryable<Arena> GetAllArenasWithUserNoTracking()
+        {
+            return _dbContext.Arenas
+                .Include(a => a.User)
+                .AsNoTracking();
+        }
+
         // Dispose pattern implementation
         protected virtual void Dispose(bool disposing)
         {
@@ -76,5 +78,6 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
     }
 }

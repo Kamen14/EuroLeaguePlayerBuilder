@@ -234,5 +234,38 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             await _arenaRepository.DeleteArenaFromDbAsync(selectedArena);
         }
+
+        public async Task<IEnumerable<AdminArenaDto>> GetAllArenasForAdminAsync()
+        {
+            IEnumerable<AdminArenaDto> allArenas = await _arenaRepository
+                .GetAllArenasNoTracking()
+                .Select(a => new AdminArenaDto
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    City = a.City,
+                    Country = a.Country,
+                    Capacity = a.Capacity,
+                    CreatedByEmail = a.User != null ? a.User.Email : null,
+                    CreatedByNickname = a.User != null ? a.User.Nickname : null
+                })
+                .OrderBy(a => a.CreatedByEmail == null ? 1 : 0)
+                .ThenBy(a => a.CreatedByNickname ?? a.CreatedByEmail)
+                .ThenBy(a => a.Name)
+                .ToListAsync();
+
+            return allArenas;
+        }
+
+        public async Task<bool> IsArenaUserCreatedAsync(int arenaId)
+        {
+            string? playerUserId = await _arenaRepository
+                .GetAllArenasNoTracking()
+                .Where(a => a.Id == arenaId)
+                .Select(a => a.UserId)
+                .SingleOrDefaultAsync();
+
+            return playerUserId != null; 
+        }
     }
 }

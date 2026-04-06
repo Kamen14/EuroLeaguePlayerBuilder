@@ -89,8 +89,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if(!await _arenaService.IsArenaUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+
             string? userId = GetUserId();
-            if(!await _arenaService.IsArenaOwnedByUserAsync(id, userId!))
+            if(!await _arenaService.IsArenaOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -121,8 +126,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if (!await _arenaService.IsArenaUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+
             string? userId = GetUserId();
-            if (!await _arenaService.IsArenaOwnedByUserAsync(id, userId!))
+            if (!await _arenaService.IsArenaOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -168,8 +178,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if (!await _arenaService.IsArenaUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+
             string? userId = GetUserId();
-            if (!await _arenaService.IsArenaOwnedByUserAsync(id, userId!))
+            if (!await _arenaService.IsArenaOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -196,8 +211,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if (!await _arenaService.IsArenaUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+
             string? userId = GetUserId();
-            if (!await _arenaService.IsArenaOwnedByUserAsync(id, userId!))
+            if (!await _arenaService.IsArenaOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }

@@ -116,7 +116,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
 
             string? userId = GetUserId();
-            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!))
+            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -152,7 +152,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
 
             string? userId = GetUserId();
-            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!))
+            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -180,7 +180,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
 
             string? userId = GetUserId();
-            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!))
+            if (!await _gameService.IsGameOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }

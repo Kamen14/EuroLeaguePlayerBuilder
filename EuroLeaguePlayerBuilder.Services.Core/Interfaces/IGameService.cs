@@ -27,5 +27,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
         Task<GameDeleteDto> GetGameForDeleteByIdAsync(int id);
 
         Task DeleteGameAsync(int id);
+
+        Task<IEnumerable<AdminGameDto>> GetAllArenasForAdminAsync();
     }
 }

@@ -58,6 +58,12 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
             _dbContext.Players.Remove(selectedPlayer);
             await _dbContext.SaveChangesAsync();
         }
+        public IQueryable<Player> GetAllPlayersWithUserNoTracking()
+        {
+            return _dbContext.Players
+                .Include(p => p.User)
+                .AsNoTracking();
+        }
 
         // Dispose pattern implementation
         protected virtual void Dispose(bool disposing)
@@ -77,5 +83,6 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
     }
 }

@@ -195,5 +195,27 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             await _gameRepository.DeleteGameFromDbAsync(selectedGame);
         }
+
+        public async Task<IEnumerable<AdminGameDto>> GetAllArenasForAdminAsync()
+        {
+            IEnumerable<AdminGameDto> allGames = await _gameRepository
+                .GetAllGames()
+                .OrderBy(g => g.TeamOne.Name)
+                .ThenBy(g => g.TeamTwo.Name)
+                .Select(g => new AdminGameDto
+                {
+                    Id = g.Id,
+                    TeamOneLogoPath = g.TeamOne.LogoPath,
+                    TeamOneScore = g.TeamOneScore,
+                    TeamTwoLogoPath = g.TeamTwo.LogoPath,
+                    TeamTwoScore = g.TeamTwoScore,
+                    ArenaName = g.Arena.Name,
+                    CreatedByEmail = g.User != null ? g.User.Email : null,
+                    CreatedByNickname = g.User != null ? g.User.Nickname : null
+                })
+                .ToListAsync();
+
+            return allGames;
+        }
     }
 }

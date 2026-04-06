@@ -255,5 +255,38 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 .ThenBy(pvm => pvm.LastName)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<AdminPlayerDto>> GetAllPlayersForAdminAsync()
+        {
+            IEnumerable<AdminPlayerDto> allPlayers = await _playerRepository
+                .GetAllPlayersNoTracking()
+                .Select(p => new AdminPlayerDto
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Position = PositionToString[p.Position],
+                    CreatedByEmail = p.User != null ? p.User.Email : null,
+                    CreatedByNickname = p.User != null ? p.User.Nickname : null
+                })
+                .OrderBy(p => p.CreatedByEmail == null ? 1 : 0)
+                .ThenBy(p => p.CreatedByNickname ?? p.CreatedByEmail)
+                .ThenBy(p => p.FirstName)
+                .ThenBy(p => p.LastName)
+                .ToListAsync();
+
+            return allPlayers;
+        }
+
+        public async Task<bool> IsPlayerUserCreatedAsync(int playerId)
+        {
+            string? playerUserId = await _playerRepository
+                .GetAllPlayersNoTracking()
+                .Where(p => p.Id == playerId)
+                .Select(p => p.UserId)
+                .SingleOrDefaultAsync();
+
+            return playerUserId != null;
+        }
     }
 }

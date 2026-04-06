@@ -1,0 +1,60 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Arenas
+@model IEnumerable<AdminArenaViewModel>
+@{
+    ViewData["Title"] = "Manage Arenas";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>All Arenas</h1>
+        <a asp-area="" asp-controller="Arenas" asp-action="Create"
+           class="btn" style="background-color: darkorange; color: black; font-weight: bold;">
+            + Add Arena
+        </a>
+    </div>
+
+    <table class="table table-dark table-bordered table-hover">
+        <thead>
+            <tr style="color: darkorange;">
+                <th>Name</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Capacity</th>
+                <th>Created By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody style="color: white;">
+            @foreach (var arena in Model)
+            {
+                <tr>
+                    <td>@arena.Name</td>
+                    <td>@arena.City</td>
+                    <td>@arena.Country</td>
+                    <td>@arena.Capacity</td>
+                    <td>@(arena.CreatedByNickname ?? arena.CreatedByEmail ?? "-")</td>
+                    <td>
+                        <a asp-area="" asp-controller="Arenas"
+                           asp-action="Details" asp-route-id="@arena.Id"
+                           class="btn btn-sm btn-warning text-dark me-1">
+                            View
+                        </a>
+                        @if (arena.CreatedByEmail != null)
+                        {
+                            <a asp-area="" asp-controller="Arenas"
+                               asp-action="Edit" asp-route-id="@arena.Id"
+                               class="btn btn-sm btn-info text-dark me-1">
+                                Edit
+                            </a>
+                            <a asp-area="" asp-controller="Arenas"
+                               asp-action="Delete" asp-route-id="@arena.Id"
+                               class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

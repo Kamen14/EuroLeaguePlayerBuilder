@@ -48,6 +48,10 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Players" asp-action="MyPlayers">My Players</a>
                             </li>
                         }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav-link">Admin Panel</a>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

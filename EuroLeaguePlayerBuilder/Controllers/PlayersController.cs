@@ -149,8 +149,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if (!await _playerService.IsPlayerUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+                
             string? userId = GetUserId();
-            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -188,8 +193,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if (!await _playerService.IsPlayerUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+
             string? userId = GetUserId();
-            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -261,8 +271,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if (!await _playerService.IsPlayerUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+
             string? userId = GetUserId();
-            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }
@@ -292,8 +307,13 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 return NotFound();
             }
 
+            if (!await _playerService.IsPlayerUserCreatedAsync(id))
+            {
+                return Forbid();
+            }
+
             string? userId = GetUserId();
-            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!))
+            if (!await _playerService.IsPlayerOwnedByUserAsync(id, userId!) && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }

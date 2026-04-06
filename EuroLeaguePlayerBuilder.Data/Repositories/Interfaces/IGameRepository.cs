@@ -1,9 +1,4 @@
 ﻿using EuroLeaguePlayerBuilder.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EuroLeaguePlayerBuilder.Data.Repositories.Interfaces
 {
@@ -18,5 +13,9 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories.Interfaces
         Task UpdateGameAsync(Game selectedGame);
 
         Task DeleteGameFromDbAsync(Game selectedGame);
+
+        IQueryable<Game> GetAllGamesWithDetailsNoTracking();
+
+        IQueryable<Game> GetAllGamesWithUserNoTracking();
     }
 }

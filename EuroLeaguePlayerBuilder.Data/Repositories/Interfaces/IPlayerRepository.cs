@@ -17,5 +17,7 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories.Interfaces
         Task UpdatePlayerAsync(Player selectedPlayer);
 
         Task DeletePlayerFromDbAsync(Player selectedPlayer);
+
+        IQueryable<Player> GetAllPlayersWithUserNoTracking();
     }
 }

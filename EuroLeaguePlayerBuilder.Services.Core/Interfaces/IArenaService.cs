@@ -1,10 +1,4 @@
 ﻿using EuroLeaguePlayerBuilder.Services.Models.Arenas;
-using EuroLeaguePlayerBuilder.Services.Models.Players;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 {
@@ -27,5 +21,9 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
         Task<DeleteArenaDto> GetArenaForDeleteByIdAsync(int id);
 
         Task DeleteArenaAsync(int id);
+
+        Task<IEnumerable<AdminArenaDto>> GetAllArenasForAdminAsync();
+
+        Task<bool> IsArenaUserCreatedAsync(int arenaId);
     }
 }

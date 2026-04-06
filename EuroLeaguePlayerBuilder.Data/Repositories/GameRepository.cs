@@ -1,12 +1,6 @@
 ﻿using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static EuroLeaguePlayerBuilder.GCommon.EntityValidation;
 
 namespace EuroLeaguePlayerBuilder.Data.Repositories
 {
@@ -49,6 +43,23 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
         {
             _dbContext.Games.Remove(selectedGame);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public IQueryable<Game> GetAllGamesWithDetailsNoTracking()
+        {
+            return _dbContext.Games
+                .Include(g => g.TeamOne)
+                .Include(g => g.TeamTwo)
+                .Include(g => g.Arena)
+                .Include(g => g.User)
+                .AsNoTracking();
+        }
+
+        public IQueryable<Game> GetAllGamesWithUserNoTracking()
+        {
+            return _dbContext.Games
+                .Include(a => a.User)
+                .AsNoTracking();
         }
 
         // Dispose pattern implementation

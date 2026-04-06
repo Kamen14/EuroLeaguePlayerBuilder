@@ -1,0 +1,55 @@
+﻿@using EuroLeaguePlayerBuilder.ViewModels.Games
+@model IEnumerable<AdminGameViewModel>
+@{
+    ViewData["Title"] = "Manage Games";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>All Games</h1>
+        <a asp-area="" asp-controller="Games" asp-action="Create"
+           class="btn" style="background-color: darkorange; color: black; font-weight: bold;">
+            + Add Game
+        </a>
+    </div>
+
+    <table class="table table-dark table-bordered table-hover">
+        <thead>
+            <tr style="color: darkorange;">
+                <th>Team One</th>
+                <th>Score</th>
+                <th>Team Two</th>
+                <th>Arena</th>
+                <th>Created By</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody style="color: white;">
+            @foreach (var game in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@game.TeamOneLogoPath" alt="Team One"
+                             style="height: 30px; object-fit: contain;" />
+                    </td>
+                    <td class="text-orange fw-bold">
+                        @game.TeamOneScore - @game.TeamTwoScore
+                    </td>
+                    <td>
+                        <img src="@game.TeamTwoLogoPath" alt="Team Two"
+                             style="height: 30px; object-fit: contain;" />
+                    </td>
+                    <td>@game.ArenaName</td>
+                    <td>@(game.CreatedByNickname ?? game.CreatedByEmail ?? "-")</td>
+                    <td>
+                        <a asp-area="" asp-controller="Games"
+                           asp-action="Delete" asp-route-id="@game.Id"
+                           class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

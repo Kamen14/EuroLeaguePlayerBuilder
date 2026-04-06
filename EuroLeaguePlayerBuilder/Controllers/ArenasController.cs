@@ -40,6 +40,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ArenaInputModel inputModel)
         {
             if (!ModelState.IsValid)
@@ -111,6 +112,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromRoute] int id, ArenaInputModel inputModel)
         {
             if (id <= 0)
@@ -196,6 +198,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete([FromRoute] int id, DeleteArenaViewModel? deleteViewModel)
         {
             if (id <= 0)

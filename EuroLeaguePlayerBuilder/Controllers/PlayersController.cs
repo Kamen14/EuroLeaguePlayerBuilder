@@ -32,6 +32,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             return View(playerViewModels);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             if (id <= 0)
@@ -79,6 +80,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PlayerInputModel inputModel)
         {
             inputModel.Teams = (await _playerService.LoadTeamsDropdownAsync())
@@ -179,6 +181,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromRoute] int id, PlayerInputModel inputModel)
         {
             if (id <= 0)
@@ -293,6 +296,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete([FromRoute] int id, DeletePlayerViewModel? viewModel, string? returnUrl)
         {
             if (id <= 0)
@@ -349,7 +353,6 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             return View(nameof(Index), playerViewModels);
         }
-
 
         public async Task<IActionResult> MyPlayers()
         {

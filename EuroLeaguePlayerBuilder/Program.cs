@@ -35,6 +35,8 @@ namespace EuroLeaguePlayerBuilder
             builder.Services.AddScoped<IGameService, GameService>();
             builder.Services.AddScoped<IUserService, UserService>();
 
+            builder.Services.AddAntiforgery();
+
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 ConfigureIdentity(builder.Configuration, options);

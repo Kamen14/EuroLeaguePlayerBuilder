@@ -52,6 +52,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GameInputModel inputModel)
         {
             GameInputDto inputData = await _gameService.GetGameInputDataAsync();
@@ -100,6 +101,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Simulate([FromRoute] int id)
         {
             if (id <= 0)
@@ -164,6 +166,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete([FromRoute] int id, GameDeleteViewModel? deleteViewModel)
         {
             if (id <= 0)

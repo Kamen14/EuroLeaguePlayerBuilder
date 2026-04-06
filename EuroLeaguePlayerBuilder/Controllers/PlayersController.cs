@@ -5,6 +5,7 @@ using EuroLeaguePlayerBuilder.ViewModels.Players;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -94,14 +95,14 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             if (!teamExists)
             {
-                ModelState.AddModelError(nameof(inputModel.TeamId), "Selected team does not exist.");
+                ModelState.AddModelError(nameof(inputModel.TeamId), SelectedTeamDoesNotExistControllerError);
 
                 return View(inputModel);
             }
 
             if (!Enum.IsDefined(typeof(Position), inputModel.Position))
             {
-                ModelState.AddModelError(nameof(inputModel.Position), "Selected position is invalid.");
+                ModelState.AddModelError(nameof(inputModel.Position), SelectedPositionIsInvalidControllerError);
 
                 return View(inputModel);
             }
@@ -127,7 +128,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch (Exception)
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while creating the player. Please try again.");
+                ModelState.AddModelError(string.Empty, PlayerCreationControllerError);
 
                 return View(inputModel);
             }
@@ -218,14 +219,14 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             if (!teamExists)
             {
-                ModelState.AddModelError(nameof(inputModel.TeamId), "Selected team does not exist.");
+                ModelState.AddModelError(nameof(inputModel.TeamId), SelectedTeamDoesNotExistControllerError);
 
                 return View(inputModel);
             }
 
             if (!Enum.IsDefined(typeof(Position), inputModel.Position))
             {
-                ModelState.AddModelError(nameof(inputModel.Position), "Selected position is invalid.");
+                ModelState.AddModelError(nameof(inputModel.Position), SelectedPositionIsInvalidControllerError);
 
                 return View(inputModel);
             }
@@ -249,7 +250,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch (Exception)
             {
-                ModelState.AddModelError(string.Empty, "An error occured while editing the player. Please try again.");
+                ModelState.AddModelError(string.Empty, PlayerEditControllerError);
 
                 return View(inputModel);
             }
@@ -331,7 +332,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while deleting the player. Please try again.");
+                ModelState.AddModelError(string.Empty, PlayerDeleteControllerError);
                 return View(viewModel);
             }
         }

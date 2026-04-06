@@ -2,13 +2,8 @@
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Users;
-using EuroLeaguePlayerBuilder.ViewModels.Admin;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -51,7 +46,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (user == null)
             {
-                throw new ArgumentException("User not found.");
+                throw new ArgumentException(UserNotFoundServiceError);
             }
 
             await _userManager.RemoveFromRoleAsync(user, "User");
@@ -64,7 +59,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (user == null)
             {
-                throw new ArgumentException("User not found.");
+                throw new ArgumentException(UserNotFoundServiceError);
             }
 
             await _userManager.RemoveFromRoleAsync(user, "Admin");

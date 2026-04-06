@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Players;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -104,7 +105,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if(!successfullyAdded)
             {
-                throw new DbUpdateException("An error occurred while adding the player to the database.");
+                throw new DbUpdateException(PlayerAddToDatabaseServiceError);
             }
         }
 
@@ -150,7 +151,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if(selectedPlayer == null)
             {
-                throw new ArgumentException("Player with the provided ID does not exist.");
+                throw new ArgumentException(PlayerWithProvidedIdDoesNotExistServiceError);
             }
 
             selectedPlayer.FirstName = inputDto.FirstName;
@@ -192,7 +193,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (selectedPlayer == null)
             {
-                throw new ArgumentException("Player with the provided ID does not exist.");
+                throw new ArgumentException(PlayerWithProvidedIdDoesNotExistServiceError);
             }
 
             await _playerRepository.DeletePlayerFromDbAsync(selectedPlayer);

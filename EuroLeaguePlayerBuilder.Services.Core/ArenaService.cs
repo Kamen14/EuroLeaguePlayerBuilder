@@ -5,6 +5,7 @@ using EuroLeaguePlayerBuilder.Services.Models.Arenas;
 using Microsoft.EntityFrameworkCore;
 using static EuroLeaguePlayerBuilder.GCommon.ImageConstants.ArenaImages;
 using static EuroLeaguePlayerBuilder.GCommon.ImageValidator;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -45,12 +46,12 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             if (inputDto.Image != null && inputDto.Image.Length > 0)
             {
                 if (!await IsValidImageAsync(inputDto.Image))
-                    throw new InvalidOperationException("Invalid file type.");
+                    throw new InvalidOperationException(InvalidFileTypeServiceError);
 
                 const long MaxFileSize = MaxArenaImageSize;
 
                 if (inputDto.Image.Length > MaxFileSize)
-                    throw new InvalidOperationException("File size must not exceed 3MB.");
+                    throw new InvalidOperationException(FileSizeServiceError);
 
                 string uploadsFolder = Path.Combine(wwwRootPath, "images", "arenas");
                 Directory.CreateDirectory(uploadsFolder);
@@ -80,7 +81,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (!successfulyAdded)
             {
-                throw new DbUpdateException("An error occurred while adding the arena to the database.");
+                throw new DbUpdateException(ArenaAddToDatabaseServiceError);
             }
         }
 
@@ -153,7 +154,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (selectedArena == null)
             {
-                throw new ArgumentException("Arena with the provided ID does not exist.");
+                throw new ArgumentException(ArenaWithThisIdDoesNotExistServiceError);
             }
 
             selectedArena.Name = inputDto.Name;
@@ -166,12 +167,12 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 // Validate file type and size
 
                 if (!await IsValidImageAsync(inputDto.Image))
-                    throw new InvalidOperationException("Invalid file type.");
+                    throw new InvalidOperationException(InvalidFileTypeServiceError);
 
                 const long MaxFileSize = MaxArenaImageSize;
 
                 if (inputDto.Image.Length > MaxFileSize)
-                    throw new InvalidOperationException("File size must not exceed 3MB.");
+                    throw new InvalidOperationException(FileSizeServiceError);
 
                 //delete old image if exists
                 
@@ -229,7 +230,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (selectedArena == null)
             {
-                throw new ArgumentException("Player with the provided ID does not exist.");
+                throw new ArgumentException(ArenaWithThisIdDoesNotExistServiceError);
             }
 
             await _arenaRepository.DeleteArenaFromDbAsync(selectedArena);

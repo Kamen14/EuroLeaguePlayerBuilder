@@ -1,14 +1,11 @@
-﻿using EuroLeaguePlayerBuilder.Services.Core;
-using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
+﻿using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Arenas;
-using EuroLeaguePlayerBuilder.Services.Models.Players;
 using EuroLeaguePlayerBuilder.ViewModels.Arenas;
-using EuroLeaguePlayerBuilder.ViewModels.Players;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static EuroLeaguePlayerBuilder.GCommon.ImageConstants.ArenaImages;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -67,7 +64,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while creating the arena. Please try again.");
+                ModelState.AddModelError(string.Empty, ArenaCreationControllerError);
 
                 return View(inputModel);
             }
@@ -159,7 +156,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while editing the arena. Please try again.");
+                ModelState.AddModelError(string.Empty, ArenaEditControllerError);
                 return View(inputModel);
             }
         }
@@ -229,7 +226,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while deleting the arena. Please try again.");
+                ModelState.AddModelError(string.Empty, ArenaDeleteControllerError);
                 return View(deleteViewModel);
             }
         }

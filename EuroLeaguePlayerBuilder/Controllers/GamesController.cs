@@ -1,13 +1,10 @@
-﻿using EuroLeaguePlayerBuilder.Services.Core;
-using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
-using EuroLeaguePlayerBuilder.Services.Models.Arenas;
+﻿using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Games;
-using EuroLeaguePlayerBuilder.ViewModels.Arenas;
 using EuroLeaguePlayerBuilder.ViewModels.Games;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -78,7 +75,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             if (inputModel.TeamOneId == inputModel.TeamTwoId)
             {
-                ModelState.AddModelError(string.Empty, "Team One and Team Two cannot be the same team.");
+                ModelState.AddModelError(string.Empty, SameTeamsControllerError);
                 return View(inputModel);
             }
 
@@ -97,7 +94,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while creating the game. Please try again.");
+                ModelState.AddModelError(string.Empty, GameCreationControllerError);
                 return View(inputModel);
             }
         }
@@ -192,7 +189,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "An error occurred while deleting the game. Please try again.");
+                ModelState.AddModelError(string.Empty, GameDeleteControllerError);
                 return View(deleteViewModel);
             }
         }

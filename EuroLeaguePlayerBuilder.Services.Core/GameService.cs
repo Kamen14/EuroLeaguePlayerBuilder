@@ -1,16 +1,9 @@
 ﻿using EuroLeaguePlayerBuilder.Data.Models;
-using EuroLeaguePlayerBuilder.Data.Repositories;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
-using EuroLeaguePlayerBuilder.Services.Models.Arenas;
 using EuroLeaguePlayerBuilder.Services.Models.Games;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static EuroLeaguePlayerBuilder.GCommon.EntityValidation;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -98,7 +91,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (!successfullyAdded)
             {
-                throw new DbUpdateException("An error occurred while adding the game to the database.");
+                throw new DbUpdateException(GameAddToDatabaseServiceError);
             }
         }
 
@@ -130,7 +123,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if(selectedGame == null)
             {
-                throw new ArgumentException("The specified game does not exist.");
+                throw new ArgumentException(GameDoesNotExistServiceError);
             }
 
             selectedGame.TeamOneScore = teamOneScore;
@@ -190,7 +183,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
 
             if (selectedGame == null)
             {
-                throw new ArgumentException("Player with the provided ID does not exist.");
+                throw new ArgumentException(GameDoesNotExistServiceError);
             }
 
             await _gameRepository.DeleteGameFromDbAsync(selectedGame);

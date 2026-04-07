@@ -33,6 +33,7 @@ namespace EuroLeaguePlayerBuilder.Data.Repositories
             return await _dbContext.Teams
                 .Include(t => t.Coach)
                 .Include(t => t.Players)
+                .Include(t => t.Arena)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(t => t.Id == id);
         }

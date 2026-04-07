@@ -74,7 +74,9 @@ namespace EuroLeaguePlayerBuilder.Controllers
                     UserId = p.UserId,
                 })
                .OrderBy(pvm => pvm.FirstName)
-               .ToList()
+               .ToList(),
+                ArenaName = teamDetails.ArenaName,
+                ArenaCapacity = teamDetails.ArenaCapacity
             };
 
             return View(teamDetailsViewModel);

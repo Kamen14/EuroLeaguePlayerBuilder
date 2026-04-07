@@ -16,8 +16,11 @@
             <h2 class="text-orange">@Model.Name</h2>
         </div>
         
-        <!-- Coach and Players -->
+
+        <!-- Coach, Players and Arena -->
         <div class="col-12 col-md-9">
+            <p class="text-white-50 mb-3"><small>Arena: @Model.ArenaName — @Model.ArenaCapacity seats</small></p>
+
             <!-- Coach Table -->
 			<partial name="_CoachPartial" model="Model.Coach" />
 

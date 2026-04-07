@@ -68,7 +68,9 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     UserId = p.UserId,
                 })
                 .OrderBy(pDto => pDto.FirstName)
-                .ToList()
+                .ToList(),
+                ArenaName = team.Arena!.Name,
+                ArenaCapacity = team.Arena!.Capacity
             };
 
             return teamDetails;

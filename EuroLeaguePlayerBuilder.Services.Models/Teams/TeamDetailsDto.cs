@@ -12,5 +12,9 @@ namespace EuroLeaguePlayerBuilder.Services.Models.Teams
         public CoachDto Coach { get; set; } = null!;
 
         public IEnumerable<PlayerDto>? Players { get; set; } = new List<PlayerDto>();
+
+        public string ArenaName { get; set; } = null;
+
+        public int ArenaCapacity { get; set; }
     }
 }

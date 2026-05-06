@@ -1,4 +1,5 @@
 ﻿using EuroLeaguePlayerBuilder.Services.Models.Arenas;
+using EuroLeaguePlayerBuilder.ViewModels.Arenas;
 
 namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 {
@@ -25,5 +26,9 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
         Task<IEnumerable<AdminArenaDto>> GetAllArenasForAdminAsync();
 
         Task<bool> IsArenaUserCreatedAsync(int arenaId);
+
+        ArenaInputDto MapInputModelToDto(ArenaInputModel inputModel);
+
+        IEnumerable<ArenaViewModel> MapArenaDtoToArenaViewModel(IEnumerable<ArenaDto> arenas);
     }
 }

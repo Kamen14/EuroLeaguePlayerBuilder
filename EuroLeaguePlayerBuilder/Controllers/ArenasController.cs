@@ -27,7 +27,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         {
             IEnumerable<ArenaDto> arenas
                 = await _arenaService.GetAllArenasOrderedByNameAsync();
-            IEnumerable<ArenaViewModel> arenaViewModels = MapArenaDtoToArenaViewModel(arenas);
+            IEnumerable<ArenaViewModel> arenaViewModels = _arenaService.MapArenaDtoToArenaViewModel(arenas);
 
             return View(arenaViewModels);
         }
@@ -50,7 +50,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-                ArenaInputDto inputDto = MapInputModelToDto(inputModel);
+                ArenaInputDto inputDto = _arenaService.MapInputModelToDto(inputModel);
 
                 string? userId = GetUserId();
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
@@ -143,7 +143,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-                ArenaInputDto inputDto = MapInputModelToDto(inputModel);
+                ArenaInputDto inputDto = _arenaService.MapInputModelToDto(inputModel);
 
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
 
@@ -242,35 +242,9 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 .GetUserArenas(userId!);
 
             IEnumerable<ArenaViewModel> arenaViewModels
-                = MapArenaDtoToArenaViewModel(userArenas);
+                = _arenaService.MapArenaDtoToArenaViewModel(userArenas);
 
             return View(arenaViewModels);
-        }
-
-        private static ArenaInputDto MapInputModelToDto(ArenaInputModel inputModel)
-        {
-            return new ArenaInputDto
-            {
-                Name = inputModel.Name,
-                City = inputModel.City,
-                Country = inputModel.Country,
-                Capacity = inputModel.Capacity,
-                Image = inputModel.Image
-            };
-        }
-
-        private static IEnumerable<ArenaViewModel> MapArenaDtoToArenaViewModel(IEnumerable<ArenaDto> arenas)
-        {
-            return arenas.Select(a => new ArenaViewModel
-            {
-                Id = a.Id,
-                Name = a.Name,
-                City = a.City,
-                Country = a.Country,
-                Capacity = a.Capacity,
-                ImagePath = a.ImagePath,
-                UserId = a.UserId
-            });
         }
 
         private string? GetUserId()

@@ -27,7 +27,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 .GetAllPlayersOrderedByNameAsync();
 
             IEnumerable<PlayerViewModel> playerViewModels
-                = MapPlayerDtoToPlayerViewModel(allPlayers);
+                = _playerService.MapPlayerDtoToPlayerViewModel(allPlayers);
 
             return View(playerViewModels);
         }
@@ -71,7 +71,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             PlayerInputModel inputModel = new PlayerInputModel
             {
-                Teams = inputDto.Teams.Select(MapCreatePlayerTeamDtoToViewModel)
+                Teams = inputDto.Teams.Select(_playerService.MapCreatePlayerTeamDtoToViewModel)
                 .ToList()
             };
 
@@ -84,7 +84,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
         public async Task<IActionResult> Create(PlayerInputModel inputModel)
         {
             inputModel.Teams = (await _playerService.LoadTeamsDropdownAsync())
-                .Select(MapCreatePlayerTeamDtoToViewModel)
+                .Select(_playerService.MapCreatePlayerTeamDtoToViewModel)
                 .ToList();
 
             if (!ModelState.IsValid)
@@ -173,7 +173,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 AssistsPerGame = inputDto.AssistsPerGame,
                 TeamId = inputDto.TeamId,
                 Teams = inputDto.Teams
-                .Select(MapCreatePlayerTeamDtoToViewModel)
+                .Select(_playerService.MapCreatePlayerTeamDtoToViewModel)
                 .ToList()
             };
 
@@ -209,7 +209,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
             }
 
             inputModel.Teams = (await _playerService.LoadTeamsDropdownAsync())
-                .Select(MapCreatePlayerTeamDtoToViewModel)
+                .Select(_playerService.MapCreatePlayerTeamDtoToViewModel)
                 .ToList();
 
             if (!ModelState.IsValid)
@@ -349,7 +349,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 .SearchPlayerByFirstAndLastNameAsync(name);
 
             IEnumerable<PlayerViewModel> playerViewModels
-                = MapPlayerDtoToPlayerViewModel(filteredPlayers);
+                = _playerService.MapPlayerDtoToPlayerViewModel(filteredPlayers);
 
             return View(nameof(Index), playerViewModels);
         }
@@ -361,7 +361,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 .GetUserPlayers(userId!);
 
             IEnumerable<PlayerViewModel> playerViewModels
-                = MapPlayerDtoToPlayerViewModel(userPlayers);
+                = _playerService.MapPlayerDtoToPlayerViewModel(userPlayers);
 
             return View(playerViewModels);
         }
@@ -369,28 +369,6 @@ namespace EuroLeaguePlayerBuilder.Controllers
         private string? GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        }
-
-        private static IEnumerable<PlayerViewModel> MapPlayerDtoToPlayerViewModel(IEnumerable<PlayerDto> playerDtos)
-        {
-            return playerDtos
-                .Select(dto => new PlayerViewModel
-                {
-                    Id = dto.Id,
-                    FirstName = dto.FirstName,
-                    LastName = dto.LastName,
-                    Position = dto.Position,
-                    UserId = dto.UserId
-                });
-        }
-
-        private CreatePlayerTeamViewModel MapCreatePlayerTeamDtoToViewModel(CreatePlayerTeamDto dto)
-        {
-            return new CreatePlayerTeamViewModel
-            {
-                Id = dto.Id,
-                Name = dto.Name
-            };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EuroLeaguePlayerBuilder.Services.Models.Arenas;
 using EuroLeaguePlayerBuilder.Services.Models.Games;
+using EuroLeaguePlayerBuilder.ViewModels.Games;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,12 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 
         Task DeleteGameAsync(int id);
 
-        Task<IEnumerable<AdminGameDto>> GetAllArenasForAdminAsync();
+        Task<IEnumerable<AdminGameDto>> GetAllGamesForAdminAsync();
+
+        IEnumerable<GameViewModel> MapGameDtoToGameViewModel(IEnumerable<GameDto> games);
+
+        Func<GameArenaDto, GameArenaViewModel> MapGameArenaDtoToViewModel();
+
+        Func<GameTeamDto, GameTeamViewModel> MapGameTeamDtoToViewModel();
     }
 }

@@ -1,10 +1,11 @@
-﻿using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
-using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
-using Microsoft.EntityFrameworkCore;
-using EuroLeaguePlayerBuilder.Data.Models;
+﻿using EuroLeaguePlayerBuilder.Data.Models;
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
+using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Players;
+using EuroLeaguePlayerBuilder.ViewModels.Players;
+using Microsoft.EntityFrameworkCore;
 using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
+using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -288,6 +289,28 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 .SingleOrDefaultAsync();
 
             return playerUserId != null;
+        }
+
+        public  IEnumerable<PlayerViewModel> MapPlayerDtoToPlayerViewModel(IEnumerable<PlayerDto> playerDtos)
+        {
+            return playerDtos
+                .Select(dto => new PlayerViewModel
+                {
+                    Id = dto.Id,
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Position = dto.Position,
+                    UserId = dto.UserId
+                });
+        }
+
+        public CreatePlayerTeamViewModel MapCreatePlayerTeamDtoToViewModel(CreatePlayerTeamDto dto)
+        {
+            return new CreatePlayerTeamViewModel
+            {
+                Id = dto.Id,
+                Name = dto.Name
+            };
         }
     }
 }

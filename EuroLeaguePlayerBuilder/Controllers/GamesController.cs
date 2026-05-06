@@ -24,7 +24,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             IEnumerable<GameDto> games
                 = await _gameService.GetUserGamesAsync(userId!);
-            IEnumerable<GameViewModel> gameViewModels = MapGameDtoToGameViewModel(games);
+            IEnumerable<GameViewModel> gameViewModels = _gameService.MapGameDtoToGameViewModel(games);
 
             return View(gameViewModels);
         }
@@ -35,11 +35,11 @@ namespace EuroLeaguePlayerBuilder.Controllers
             GameInputDto gameInputData = await _gameService.GetGameInputDataAsync();
 
             IEnumerable<GameArenaViewModel> arenas = gameInputData.Arenas
-                .Select(MapGameArenaDtoToViewModel())
+                .Select(_gameService.MapGameArenaDtoToViewModel())
                 .ToList();
 
             IEnumerable<GameTeamViewModel> teams = gameInputData.Teams
-                .Select(MapGameTeamDtoToViewModel())
+                .Select(_gameService.MapGameTeamDtoToViewModel())
                 .ToList();
 
             GameInputModel inputModel = new GameInputModel
@@ -58,11 +58,11 @@ namespace EuroLeaguePlayerBuilder.Controllers
             GameInputDto inputData = await _gameService.GetGameInputDataAsync();
 
             IEnumerable<GameArenaViewModel> arenas = inputData.Arenas
-                .Select(MapGameArenaDtoToViewModel())
+                .Select(_gameService.MapGameArenaDtoToViewModel())
                 .ToList();
 
             IEnumerable<GameTeamViewModel> teams = inputData.Teams
-                .Select(MapGameTeamDtoToViewModel())
+                .Select(_gameService.MapGameTeamDtoToViewModel())
                 .ToList();
 
             inputModel.Arenas = arenas;
@@ -195,40 +195,6 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 ModelState.AddModelError(string.Empty, GameDeleteControllerError);
                 return View(deleteViewModel);
             }
-        }
-
-        private static IEnumerable<GameViewModel> MapGameDtoToGameViewModel(IEnumerable<GameDto> games)
-        {
-            return games
-                .Select(g => new GameViewModel
-                {
-                    Id = g.Id,
-                    TeamOneName = g.TeamOneName,
-                    TeamOneLogoPath = g.TeamOneLogoPath,
-                    TeamOneScore = g.TeamOneScore,
-                    TeamTwoName = g.TeamTwoName,
-                    TeamTwoLogoPath = g.TeamTwoLogoPath,
-                    TeamTwoScore = g.TeamTwoScore,
-                    ArenaName = g.ArenaName
-                });
-        }
-        private static Func<GameArenaDto, GameArenaViewModel> MapGameArenaDtoToViewModel()
-        {
-            return a => new GameArenaViewModel
-            {
-                Id = a.Id,
-                Name = a.Name
-            };
-        }
-
-        private static Func<GameTeamDto, GameTeamViewModel> MapGameTeamDtoToViewModel()
-        {
-            return t => new GameTeamViewModel
-            {
-                Id = t.Id,
-                Name = t.Name,
-                LogoPath = t.LogoPath
-            };
         }
 
         private string? GetUserId()

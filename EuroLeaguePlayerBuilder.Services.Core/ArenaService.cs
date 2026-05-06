@@ -2,10 +2,11 @@
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Arenas;
+using EuroLeaguePlayerBuilder.ViewModels.Arenas;
 using Microsoft.EntityFrameworkCore;
+using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 using static EuroLeaguePlayerBuilder.GCommon.ImageConstants.ArenaImages;
 using static EuroLeaguePlayerBuilder.GCommon.ImageValidator;
-using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -267,6 +268,32 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 .SingleOrDefaultAsync();
 
             return playerUserId != null; 
+        }
+
+        public ArenaInputDto MapInputModelToDto(ArenaInputModel inputModel)
+        {
+            return new ArenaInputDto
+            {
+                Name = inputModel.Name,
+                City = inputModel.City,
+                Country = inputModel.Country,
+                Capacity = inputModel.Capacity,
+                Image = inputModel.Image
+            };
+        }
+
+        public IEnumerable<ArenaViewModel> MapArenaDtoToArenaViewModel(IEnumerable<ArenaDto> arenas)
+        {
+            return arenas.Select(a => new ArenaViewModel
+            {
+                Id = a.Id,
+                Name = a.Name,
+                City = a.City,
+                Country = a.Country,
+                Capacity = a.Capacity,
+                ImagePath = a.ImagePath,
+                UserId = a.UserId
+            });
         }
     }
 }

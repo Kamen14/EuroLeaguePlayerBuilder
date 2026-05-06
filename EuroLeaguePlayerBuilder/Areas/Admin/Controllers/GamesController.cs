@@ -17,7 +17,7 @@ namespace EuroLeaguePlayerBuilder.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<AdminGameDto> dtos = await _gameService
-                .GetAllArenasForAdminAsync();
+                .GetAllGamesForAdminAsync();
 
             IEnumerable<AdminGameViewModel> adminGameViewModels = dtos
                 .Select(dto => new AdminGameViewModel

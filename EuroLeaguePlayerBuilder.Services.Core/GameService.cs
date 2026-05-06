@@ -2,6 +2,7 @@
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Core.Interfaces;
 using EuroLeaguePlayerBuilder.Services.Models.Games;
+using EuroLeaguePlayerBuilder.ViewModels.Games;
 using Microsoft.EntityFrameworkCore;
 using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 
@@ -189,7 +190,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             await _gameRepository.DeleteGameFromDbAsync(selectedGame);
         }
 
-        public async Task<IEnumerable<AdminGameDto>> GetAllArenasForAdminAsync()
+        public async Task<IEnumerable<AdminGameDto>> GetAllGamesForAdminAsync()
         {
             IEnumerable<AdminGameDto> allGames = await _gameRepository
                 .GetAllGames()
@@ -209,6 +210,40 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 .ToListAsync();
 
             return allGames;
+        }
+
+        public IEnumerable<GameViewModel> MapGameDtoToGameViewModel(IEnumerable<GameDto> games)
+        {
+            return games
+                .Select(g => new GameViewModel
+                {
+                    Id = g.Id,
+                    TeamOneName = g.TeamOneName,
+                    TeamOneLogoPath = g.TeamOneLogoPath,
+                    TeamOneScore = g.TeamOneScore,
+                    TeamTwoName = g.TeamTwoName,
+                    TeamTwoLogoPath = g.TeamTwoLogoPath,
+                    TeamTwoScore = g.TeamTwoScore,
+                    ArenaName = g.ArenaName
+                });
+        }
+        public Func<GameArenaDto, GameArenaViewModel> MapGameArenaDtoToViewModel()
+        {
+            return a => new GameArenaViewModel
+            {
+                Id = a.Id,
+                Name = a.Name
+            };
+        }
+
+        public Func<GameTeamDto, GameTeamViewModel> MapGameTeamDtoToViewModel()
+        {
+            return t => new GameTeamViewModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                LogoPath = t.LogoPath
+            };
         }
     }
 }

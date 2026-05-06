@@ -1,4 +1,5 @@
 ﻿using EuroLeaguePlayerBuilder.Services.Models.Players;
+using EuroLeaguePlayerBuilder.ViewModels.Players;
 
 namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 {
@@ -33,5 +34,9 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
         Task<IEnumerable<AdminPlayerDto>> GetAllPlayersForAdminAsync();
 
         Task<bool> IsPlayerUserCreatedAsync(int playerId);
+
+       IEnumerable<PlayerViewModel> MapPlayerDtoToPlayerViewModel(IEnumerable<PlayerDto> playerDtos);
+
+        CreatePlayerTeamViewModel MapCreatePlayerTeamDtoToViewModel(CreatePlayerTeamDto dto);
     }
 }

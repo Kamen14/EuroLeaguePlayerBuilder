@@ -224,7 +224,10 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
             try
             {
-                await _arenaService.DeleteArenaAsync(id);
+                //add wwwrootpath to delete image from wwwroot folder
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+                await _arenaService.DeleteArenaAsync(id, wwwRootPath); 
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -21,7 +21,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 
         Task<DeleteArenaDto> GetArenaForDeleteByIdAsync(int id);
 
-        Task DeleteArenaAsync(int id);
+        Task DeleteArenaAsync(int id, string wwwRootPath);
 
         Task<IEnumerable<AdminArenaDto>> GetAllArenasForAdminAsync();
 

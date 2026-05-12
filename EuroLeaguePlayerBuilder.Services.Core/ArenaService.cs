@@ -223,7 +223,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             return deleteDto;
         }
 
-        public async Task DeleteArenaAsync(int id)
+        public async Task DeleteArenaAsync(int id, string wwwRootPath)
         {
             Arena? selectedArena = await _arenaRepository
                .GetAllArenas()
@@ -232,6 +232,15 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             if (selectedArena == null)
             {
                 throw new ArgumentException(ArenaWithThisIdDoesNotExistServiceError);
+            }
+
+            if (!string.IsNullOrEmpty(selectedArena.ImagePath))
+            {
+                string oldFilePath = Path.Combine(wwwRootPath, selectedArena.ImagePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                if (File.Exists(oldFilePath))
+                {
+                    File.Delete(oldFilePath);
+                }
             }
 
             await _arenaRepository.DeleteArenaFromDbAsync(selectedArena);

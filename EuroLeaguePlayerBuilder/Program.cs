@@ -80,6 +80,10 @@ namespace EuroLeaguePlayerBuilder
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
+               name: "slugRoute",
+               pattern: "{area:exists}/{controller=Home}/{action=Index}/{id:required}/{slug:required}");
+
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();

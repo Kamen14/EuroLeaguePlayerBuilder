@@ -27,7 +27,8 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 LastName = c.LastName,
                 TitlesWon = c.TitlesWon,
                 TeamId = c.TeamId,
-                TeamLogoPath = c.TeamLogoPath
+                TeamLogoPath = c.TeamLogoPath,
+                TeamName = c.TeamName
             });
 
             return View(coachesViewModel);

@@ -17,5 +17,7 @@ namespace EuroLeaguePlayerBuilder.Services.Models.Coaches
         public int TeamId { get; set; }
 
         public string TeamLogoPath { get; set; } = null!;
+
+        public string TeamName { get; set; } = null!;
     }
 }

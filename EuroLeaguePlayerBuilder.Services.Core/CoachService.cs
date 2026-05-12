@@ -24,7 +24,8 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     LastName = t.Coach.LastName,
                     TitlesWon = t.Coach.TitlesWon,
                     TeamId = t.Id,
-                    TeamLogoPath = t.LogoPath
+                    TeamLogoPath = t.LogoPath,
+                    TeamName = t.Name
                 })
                 .ToListAsync();
 

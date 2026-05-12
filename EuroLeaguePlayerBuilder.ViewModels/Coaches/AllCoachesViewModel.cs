@@ -11,5 +11,7 @@
         public int TeamId { get; set; }
 
         public string TeamLogoPath { get; set; } = null!;
+
+        public string TeamName { get; set; } = null!; //for slug
     }
 }

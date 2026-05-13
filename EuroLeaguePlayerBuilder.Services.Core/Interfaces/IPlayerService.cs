@@ -1,11 +1,14 @@
 ﻿using EuroLeaguePlayerBuilder.Services.Models.Players;
 using EuroLeaguePlayerBuilder.ViewModels.Players;
+using static EuroLeaguePlayerBuilder.GCommon.GlobalConstants;
 
 namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 {
     public interface IPlayerService 
     {
-        Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync(string? searchQuery = null);
+        Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync(string? searchQuery = null, int pageNumber = 1, int playersPerPage = PlayersPerPage);
+
+        Task<int> GetPlayersCountAsync(string? searchQuery = null);
 
         Task<PlayerDetailsDto> GetPlayerDetailsByIdAsync(int id);
 
@@ -33,7 +36,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 
         Task<bool> IsPlayerUserCreatedAsync(int playerId);
 
-       IEnumerable<PlayerViewModel> MapPlayerDtoToPlayerViewModel(IEnumerable<PlayerDto> playerDtos);
+        IEnumerable<PlayerViewModel> MapPlayerDtoToPlayerViewModel(IEnumerable<PlayerDto> playerDtos);
 
         CreatePlayerTeamViewModel MapCreatePlayerTeamDtoToViewModel(CreatePlayerTeamDto dto);
     }

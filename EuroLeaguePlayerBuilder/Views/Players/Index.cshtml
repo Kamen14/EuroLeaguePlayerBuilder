@@ -1,8 +1,9 @@
 ﻿@using EuroLeaguePlayerBuilder.ViewModels.Players
-@model IEnumerable<PlayerViewModel>
+@model PlayersPaginationViewModel
 
 @{
     ViewData["Title"] = "Players";
+    int endPageIndex = Math.Min((Model.StartPageIndex + Model.ShowingPages), Model.TotalPages);
 }
 
 <div class="container mt-5">
@@ -20,9 +21,9 @@
     <!-- Search bar -->
     <form asp-controller="Players" asp-action="Index" method="get" class="mb-4">
         <div class="input-group">
-            <input type="text"
+			<input asp-for="SearchQuery"
+				   type="text"
                    name="searchQuery"
-                   value="@Context.Request.Query["searchQuery"]"
                    class="form-control"
                    placeholder="Search players by name" />
             <button class="btn btn-warning text-dark fw-semibold" type="submit">
@@ -31,13 +32,55 @@
         </div>
     </form>
 
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- Previous -->
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : string.Empty)">
+                <a class="page-link"
+                   asp-controller="Players"
+                   asp-action="Index"
+                   asp-route-searchQuery="@Model.SearchQuery"
+                   asp-route-pageNumber="@(Model.PageNumber - 1)">
+                    Previous
+                </a>
+            </li>
+            <!-- Page Numbers -->
+            @for (int i = Model.StartPageIndex; i <= endPageIndex; i++)
+            {
+                @if (i > 0)
+                {
+                    <li class="page-item @(Model.PageNumber == i ? "active" : string.Empty)">
+                        <a class="page-link"
+                           asp-controller="Players"
+                           asp-action="Index"
+                           asp-route-searchQuery="@Model.SearchQuery"
+                           asp-route-pageNumber="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+            <!-- Next -->
+            <li class="page-item @(Model.PageNumber == Model.TotalPages ? "disabled" : string.Empty)">
+                <a class="page-link"
+                   asp-controller="Players"
+                   asp-action="Index"
+                   asp-route-searchQuery="@Model.SearchQuery"
+                   asp-route-pageNumber="@(Model.PageNumber + 1)">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </nav>
+
     <!-- Divider -->
     <hr class="border-secondary" />
 
     <!-- Players list -->
     <div class="bg-dark p-4 rounded shadow">
 
-        @if (!Model.Any())
+        @if (!Model.Players.Any())
         {
             <div class="text-center text-secondary fs-5 py-4">
                 No players found with that name.
@@ -45,7 +88,7 @@
         }
         else
         {
-            <partial name="_PlayerPartial" model="Model" />
+            <partial name="_PlayerPartial" model="Model.Players" />
         }
 
     </div>

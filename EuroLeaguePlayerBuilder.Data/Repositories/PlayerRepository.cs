@@ -2,7 +2,6 @@
 using EuroLeaguePlayerBuilder.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace EuroLeaguePlayerBuilder.Data.Repositories
 {
     public class PlayerRepository : IPlayerRepository, IDisposable

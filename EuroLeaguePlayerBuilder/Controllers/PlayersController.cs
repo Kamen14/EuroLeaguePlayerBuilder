@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
+using static EuroLeaguePlayerBuilder.GCommon.GlobalConstants;
 
 namespace EuroLeaguePlayerBuilder.Controllers
 {
@@ -21,15 +22,39 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Index(string? searchQuery)
+        public async Task<IActionResult> Index(PlayersPaginationViewModel playersPaginationInputModel)
         {
             IEnumerable<PlayerDto> allPlayers = await _playerService
-                .GetAllPlayersOrderedByNameAsync(searchQuery);
+                .GetAllPlayersOrderedByNameAsync(playersPaginationInputModel.SearchQuery,
+                playersPaginationInputModel.PageNumber);
 
             IEnumerable<PlayerViewModel> playerViewModels
                 = _playerService.MapPlayerDtoToPlayerViewModel(allPlayers);
 
-            return View(playerViewModels);
+            int playersCount = await _playerService.GetPlayersCountAsync(playersPaginationInputModel.SearchQuery);
+
+            PlayersPaginationViewModel playersPaginationViewModel = new PlayersPaginationViewModel()
+            {
+                SearchQuery = playersPaginationInputModel.SearchQuery,
+                PageNumber = playersPaginationInputModel.PageNumber,
+                TotalPages = (int)Math.Ceiling(playersCount / (double)PlayersPerPage),
+                ShowingPages = playersPaginationInputModel.ShowingPages,
+                StartPageIndex = (playersPaginationInputModel.PageNumber / DefaultShowingPages) * DefaultShowingPages,
+                Players = playerViewModels.ToList()
+            };
+
+            if(playersPaginationViewModel.PageNumber > playersPaginationViewModel.TotalPages 
+                && playersPaginationViewModel.TotalPages != 0)
+            {
+                return RedirectToAction(nameof(Index) ,new PlayersPaginationViewModel
+                {
+                    SearchQuery = playersPaginationInputModel.SearchQuery,
+                    PageNumber = playersPaginationViewModel.TotalPages,
+                    ShowingPages = playersPaginationInputModel.ShowingPages
+                });
+            }
+
+            return View(playersPaginationViewModel);
         }
 
         [HttpGet]

@@ -24,13 +24,12 @@ namespace EuroLeaguePlayerBuilder.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<PlayerDto> players = await _playerService.GetAllPlayersOrderedByNameAsync();
             IEnumerable<ArenaDto> arenas = await _arenaService.GetAllArenasOrderedByNameAsync();
             IEnumerable<GameDto> games = await _gameService.GetAllGamesOrderedByTeamsNameAsync();
 
             AdminDashboardViewModel viewModel = new AdminDashboardViewModel()
             {
-                TotalPlayers = players.Count(),
+                TotalPlayers = await _playerService.GetPlayersCountAsync(),
                 TotalArenas = arenas.Count(),
                 TotalGames = games.Count()
             };

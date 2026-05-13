@@ -6,6 +6,7 @@ using EuroLeaguePlayerBuilder.ViewModels.Players;
 using Microsoft.EntityFrameworkCore;
 using static EuroLeaguePlayerBuilder.GCommon.ErrorMessages;
 using static EuroLeaguePlayerBuilder.GCommon.PlayerPositionHelper;
+using static EuroLeaguePlayerBuilder.GCommon.GlobalConstants;
 
 namespace EuroLeaguePlayerBuilder.Services.Core
 {
@@ -19,7 +20,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
         }
 
 
-        public async Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync(string? searchQuery = null)
+        public async Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync(string? searchQuery = null, int pageNumber = 1, int playersPerPage = PlayersPerPage)
         {
             IQueryable<PlayerDto> allPlayers = _playerRepository
                 .GetAllPlayersNoTracking()
@@ -32,19 +33,47 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     UserId = p.UserId
                 });
 
-            if (searchQuery != null)
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 allPlayers = allPlayers
                     .Where(p => p.FirstName.ToLower().Contains(searchQuery.ToLower())
                     || p.LastName.ToLower().Contains(searchQuery.ToLower()));
             }
 
+            int skipCount = (pageNumber - 1) * playersPerPage;
+
             IEnumerable<PlayerDto> orderedPlayers = await allPlayers
-                .OrderBy(pvm => pvm.FirstName)
-                .ThenBy(pvm => pvm.LastName)
+                .OrderBy(pdto => pdto.FirstName)
+                .ThenBy(pdto => pdto.LastName)
+                .ThenBy(pdto => pdto.Id)
+                .Skip(skipCount)
+                .Take(playersPerPage)
                 .ToListAsync();
 
             return orderedPlayers;
+        }
+
+        public Task<int> GetPlayersCountAsync(string? searchQuery = null)
+        {
+            IQueryable<PlayerDto> allPlayers = _playerRepository
+               .GetAllPlayersNoTracking()
+               .Select(p => new PlayerDto
+               {
+                   Id = p.Id,
+                   FirstName = p.FirstName,
+                   LastName = p.LastName,
+                   Position = PositionToString[p.Position],
+                   UserId = p.UserId
+               });
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                allPlayers = allPlayers
+                    .Where(p => p.FirstName.ToLower().Contains(searchQuery.ToLower())
+                    || p.LastName.ToLower().Contains(searchQuery.ToLower()));
+            }
+
+            return allPlayers.CountAsync();
         }
 
         public async Task<PlayerDetailsDto> GetPlayerDetailsByIdAsync(int id)
@@ -292,5 +321,6 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                 Name = dto.Name
             };
         }
+
     }
 }

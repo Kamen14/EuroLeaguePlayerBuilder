@@ -70,3 +70,38 @@ h1{
 #delete{
     margin-top: 1rem;
 }
+
+/* Pagination */
+.pagination .page-link {
+    background-color: #2c2c2c;
+    border-color: #3a3a3a;
+    color: #6c757d;
+    box-shadow: none;
+}
+
+    .pagination .page-link:hover {
+        background-color: #3a3a3a;
+        border-color: #555;
+        color: #aaa;
+        box-shadow: none;
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: #ffa500;
+    border-color: #ffa500;
+    color: #1e1e1e;
+    font-weight: bold;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #2c2c2c;
+    border-color: #3a3a3a;
+    color: #6c757d;
+}
+
+.pagination .page-link:focus {
+    background-color: #ffa500;
+    border-color: #ffa500;
+    color: #1e1e1e;
+    box-shadow: none;
+}

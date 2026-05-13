@@ -5,7 +5,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
 {
     public interface IPlayerService 
     {
-        Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync();
+        Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync(string? searchQuery = null);
 
         Task<PlayerDetailsDto> GetPlayerDetailsByIdAsync(int id);
 
@@ -24,8 +24,6 @@ namespace EuroLeaguePlayerBuilder.Services.Core.Interfaces
         Task<DeletePlayerDto> GetPlayerForDeleteByIdAsync(int id);
 
         Task DeletePlayerAsync(int id);
-
-        Task<IEnumerable<PlayerDto>> SearchPlayerByFirstAndLastNameAsync(string? name);
 
         Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId);
 

@@ -18,16 +18,15 @@
     </div>
 
     <!-- Search bar -->
-    <form asp-action="Search" method="get" class="mb-4">
+    <form asp-controller="Players" asp-action="Index" method="get" class="mb-4">
         <div class="input-group">
             <input type="text"
-                   name="name"
-                   value="@Context.Request.Query["search"]"
+                   name="searchQuery"
+                   value="@Context.Request.Query["searchQuery"]"
                    class="form-control"
                    placeholder="Search players by name" />
-
             <button class="btn btn-warning text-dark fw-semibold" type="submit">
-                 Search
+                Search
             </button>
         </div>
     </form>

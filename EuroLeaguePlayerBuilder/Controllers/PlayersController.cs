@@ -21,10 +21,10 @@ namespace EuroLeaguePlayerBuilder.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchQuery)
         {
             IEnumerable<PlayerDto> allPlayers = await _playerService
-                .GetAllPlayersOrderedByNameAsync();
+                .GetAllPlayersOrderedByNameAsync(searchQuery);
 
             IEnumerable<PlayerViewModel> playerViewModels
                 = _playerService.MapPlayerDtoToPlayerViewModel(allPlayers);
@@ -339,19 +339,6 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 ModelState.AddModelError(string.Empty, PlayerDeleteControllerError);
                 return View(viewModel);
             }
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Search(string? name)
-        {
-            IEnumerable<PlayerDto> filteredPlayers = await _playerService
-                .SearchPlayerByFirstAndLastNameAsync(name);
-
-            IEnumerable<PlayerViewModel> playerViewModels
-                = _playerService.MapPlayerDtoToPlayerViewModel(filteredPlayers);
-
-            return View(nameof(Index), playerViewModels);
         }
 
         public async Task<IActionResult> MyPlayers()

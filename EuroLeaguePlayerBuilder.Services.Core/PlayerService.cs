@@ -19,9 +19,9 @@ namespace EuroLeaguePlayerBuilder.Services.Core
         }
 
 
-        public async Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync()
+        public async Task<IEnumerable<PlayerDto>> GetAllPlayersOrderedByNameAsync(string? searchQuery = null)
         {
-            IEnumerable<PlayerDto> allPlayers = await _playerRepository
+            IQueryable<PlayerDto> allPlayers = _playerRepository
                 .GetAllPlayersNoTracking()
                 .Select(p => new PlayerDto
                 {
@@ -30,12 +30,21 @@ namespace EuroLeaguePlayerBuilder.Services.Core
                     LastName = p.LastName,
                     Position = PositionToString[p.Position],
                     UserId = p.UserId
-                })
+                });
+
+            if (searchQuery != null)
+            {
+                allPlayers = allPlayers
+                    .Where(p => p.FirstName.ToLower().Contains(searchQuery.ToLower())
+                    || p.LastName.ToLower().Contains(searchQuery.ToLower()));
+            }
+
+            IEnumerable<PlayerDto> orderedPlayers = await allPlayers
                 .OrderBy(pvm => pvm.FirstName)
                 .ThenBy(pvm => pvm.LastName)
                 .ToListAsync();
 
-            return allPlayers;
+            return orderedPlayers;
         }
 
         public async Task<PlayerDetailsDto> GetPlayerDetailsByIdAsync(int id)
@@ -198,35 +207,6 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             }
 
             await _playerRepository.DeletePlayerFromDbAsync(selectedPlayer);
-        }
-
-        public async Task<IEnumerable<PlayerDto>> SearchPlayerByFirstAndLastNameAsync(string? name)
-        {
-            IQueryable<PlayerDto> playersQuery = _playerRepository
-                .GetAllPlayersNoTracking()
-               .Select(p => new PlayerDto
-               {
-                   Id = p.Id,
-                   FirstName = p.FirstName,
-                   LastName = p.LastName,
-                   Position = PositionToString[p.Position],
-                   UserId = p.UserId
-               });
-
-
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                playersQuery = playersQuery
-                    .Where(p => p.FirstName.ToLower().Contains(name.ToLower())
-                    || p.LastName.ToLower().Contains(name.ToLower()));
-            }
-
-            IEnumerable<PlayerDto> filteredPlayers = await playersQuery
-                .OrderBy(pvm => pvm.FirstName)
-                .ThenBy(pvm => pvm.LastName)
-                .ToListAsync();
-
-            return filteredPlayers;
         }
 
         public  async Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId)

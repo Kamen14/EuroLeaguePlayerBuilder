@@ -207,7 +207,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
         public async Task<DeletePlayerDto> GetPlayerForDeleteByIdAsync(int id)
         {
             Player? player = await _playerRepository
-               .GetAllPlayers()
+               .GetAllPlayersNoTracking()
                .SingleOrDefaultAsync(p => p.Id == id);
 
             if (player == null)
@@ -238,7 +238,7 @@ namespace EuroLeaguePlayerBuilder.Services.Core
             await _playerRepository.DeletePlayerFromDbAsync(selectedPlayer);
         }
 
-        public  async Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId)
+        public async Task<bool> IsPlayerOwnedByUserAsync(int playerId, string userId)
         {
             string? playerUserId = await _playerRepository
                 .GetAllPlayersNoTracking()

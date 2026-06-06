@@ -24,6 +24,11 @@ namespace EuroLeaguePlayerBuilder.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(PlayersPaginationViewModel playersPaginationInputModel)
         {
+            if(playersPaginationInputModel.PageNumber <= 0)
+            {
+                return BadRequest();
+            }
+
             IEnumerable<PlayerDto> allPlayers = await _playerService
                 .GetAllPlayersOrderedByNameAsync(playersPaginationInputModel.SearchQuery,
                 playersPaginationInputModel.PageNumber);
@@ -39,7 +44,7 @@ namespace EuroLeaguePlayerBuilder.Controllers
                 PageNumber = playersPaginationInputModel.PageNumber,
                 TotalPages = (int)Math.Ceiling(playersCount / (double)PlayersPerPage),
                 ShowingPages = playersPaginationInputModel.ShowingPages,
-                StartPageIndex = (playersPaginationInputModel.PageNumber / DefaultShowingPages) * DefaultShowingPages,
+                StartPageIndex = (playersPaginationInputModel.PageNumber / DefaultShowingPages) * DefaultShowingPages,// example 4/7 = 0, 0x7 = 0
                 Players = playerViewModels.ToList()
             };
 
